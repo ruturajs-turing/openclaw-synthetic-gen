@@ -1,0 +1,1165 @@
+{
+  "version": "cuarena_baseline_v1",
+  "generated_from": [
+    "/Users/ruturajsolanki/OpenClaw Privacy /CUArena/api/scripts/openclaw_skills/install_batch_v1.sh",
+    "/Users/ruturajsolanki/OpenClaw Privacy /CUArena/api/scripts/openclaw_skills/enterprise-skills",
+    "/Users/ruturajsolanki/OpenClaw Privacy /cuarena-pipeline/src/stage0/tool_tiers.json"
+  ],
+  "workspace_paths": {
+    "runtime_root": "~/.openclaw/workspace",
+    "registry_skills": "~/.openclaw/workspace/skills/<skill-id>/SKILL.md",
+    "enterprise_skills": "~/.openclaw/workspace/skills/<folder>/SKILL.md",
+    "enterprise_source_repo": "CUArena/api/scripts/openclaw_skills/enterprise-skills/skills/",
+    "installer_scripts": "~/.openclaw/workspace/tools/openclaw_skills/",
+    "plugin_skills": "~/.openclaw/plugin-skills/<skill-id>/SKILL.md",
+    "bundled_skills": "/usr/lib/node_modules/openclaw/skills/<skill-id>/SKILL.md"
+  },
+  "counts": {
+    "registry_batch": 62,
+    "enterprise": 20,
+    "social_plugins": 5,
+    "extra_bundled_plugin": 15,
+    "total": 102
+  },
+  "skills": [
+    {
+      "id": "humanizer",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "registry_batch_v1",
+      "description": "Removes signs of AI-generated writing from text to make it sound more natural and human. Based on Wikipedia's \"Signs of AI writing\" guide maintained by WikiProject AI Cleanup. Detects and fixes 24 distinct AI-writing patterns across content, language/grammar, style, communication, filler/hedging, and conclusion categories.",
+      "path": "/usr/lib/node_modules/openclaw/skills/humanizer/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "mcporter",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "registry_batch_v1",
+      "description": "Port or migrate skills between OpenClaw environments.",
+      "path": "~/.openclaw/workspace/skills/mcporter/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "self-improving",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "registry_batch_v1",
+      "description": "Enables the agent to autonomously learn from corrections, self-reflect after significant work, and compound knowledge over time via a tiered local file system. Memory is permanent and organized across hot/warm/cold tiers, replacing the need for manual maintenance.",
+      "path": "/usr/lib/node_modules/openclaw/skills/self-improving/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "self-reflection",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "registry_batch_v1",
+      "description": "Triggered on heartbeat intervals, this skill checks whether self-reflection is due and logs new insights. It is a lightweight, cron-style reflection engine that records lessons and tracks reflection statistics over time.",
+      "path": "/usr/lib/node_modules/openclaw/skills/self-reflection/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "session-logs",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "bundled",
+      "description": "Search and manage agent session logs.",
+      "path": "/usr/lib/node_modules/openclaw/skills/session-logs/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "skill-creator",
+      "tier": 1,
+      "category": "AI & Meta",
+      "source": "registry_batch_v1",
+      "description": "Guides the agent (and user) through the complete process of creating, editing, packaging, and iterating on OpenClaw skills. Provides design principles, structural templates, and automation scripts for building high-quality, distributable skill packages.",
+      "path": "/usr/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "agent-team-orchestration",
+      "tier": 1,
+      "category": "Automation",
+      "source": "registry_batch_v1",
+      "description": "Orchestrate multi-agent teams with defined roles, structured task lifecycles, explicit handoff protocols, and quality gates. Used when setting up teams of 2+ agents with different specializations, defining task routing, creating handoff protocols, establishing review workflows, and managing async communication between agents.",
+      "path": "/usr/lib/node_modules/openclaw/skills/agent-team-orchestration/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "automation-workflows",
+      "tier": 1,
+      "category": "Automation",
+      "source": "registry_batch_v1",
+      "description": "Design and implement no-code automation workflows to save time and scale solo business operations. Covers opportunity identification (time-cost analysis), tool selection (Zapier vs Make vs n8n), workflow design (triggers, conditions, actions, error handling), building, testing, monitoring, and ROI calculation. Targeted at solopreneurs automating repetitive, rule-based, high-frequency tasks.",
+      "path": "/usr/lib/node_modules/openclaw/skills/automation-workflows/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "productivity",
+      "tier": 1,
+      "category": "Automation",
+      "source": "registry_batch_v1",
+      "description": "Build and maintain a personal productivity operating system in `~/productivity/`. Covers goals, projects, tasks, habits, planning, reviews, commitments, focus sessions, routines, and inbox triage — adapted to the user's real context (student, executive, freelancer, parent, creative, burnout, ADHD, remote, manager, etc.).",
+      "path": "/usr/lib/node_modules/openclaw/skills/productivity/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "taskflow",
+      "tier": 1,
+      "category": "Automation",
+      "source": "bundled",
+      "description": "Task management: create, prioritize, schedule, delegate.",
+      "path": "/usr/lib/node_modules/openclaw/skills/taskflow/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "taskflow-inbox-triage",
+      "tier": 1,
+      "category": "Automation",
+      "source": "bundled",
+      "description": "Email triage: categorize, prioritize, draft replies.",
+      "path": "/usr/lib/node_modules/openclaw/skills/taskflow-inbox-triage/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "cfo",
+      "tier": 1,
+      "category": "Business",
+      "source": "registry_batch_v1",
+      "description": "Financial strategy and leadership: planning, cash management, fundraising, capital allocation, board reporting, risk management, M&A diligence. Splits into 4 domains via auxiliary files — `planning.md`, `cash.md`, `fundraising.md`, `operations.md`.",
+      "path": "/usr/lib/node_modules/openclaw/skills/cfo/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "marketing-mode",
+      "tier": 1,
+      "category": "Business",
+      "source": "registry_batch_v1",
+      "description": "Comprehensive marketing knowledge base combining 23 marketing disciplines into a single skill. Covers strategy, psychology, content, SEO, conversion optimization, and paid growth. Activates a marketer persona (\"Mark the Marketer\") to deliver structured, framework-driven marketing guidance.",
+      "path": "/usr/lib/node_modules/openclaw/skills/marketing-mode/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "language-learning",
+      "tier": 1,
+      "category": "Communication",
+      "source": "registry_batch_v1",
+      "description": "AI language tutor for learning ANY language through conversation, vocabulary drills, grammar lessons, flashcards, immersive practice, script/writing system instruction, cultural context, and exam preparation. Supports all human languages across three tier levels with full curriculum (Tier 1) through basic phrase tutoring (Tier 3).",
+      "path": "/usr/lib/node_modules/openclaw/skills/language-learning/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "relationship-skills",
+      "tier": 1,
+      "category": "Communication",
+      "source": "registry_batch_v1",
+      "description": "Provides guidance and frameworks for improving interpersonal relationships — covering communication, conflict resolution, date ideas, relationship health tracking, and connection-building. Designed as a consultative reference the agent uses when the user asks about relationship dynamics, conversations, or bonding.",
+      "path": "/usr/lib/node_modules/openclaw/skills/relationship-skills/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "data-analysis",
+      "tier": 1,
+      "category": "Data & Research",
+      "source": "registry_batch_v1",
+      "description": "Data analysis and visualization for SQL, spreadsheets, notebooks, dashboards, and ad hoc tables. Supports KPI debugging, experiment readouts, funnel/cohort analysis, anomaly reviews, executive reporting, and quality checks. Prefers analytical judgment over mechanical computation — every analysis must connect to a decision. Methodologically rigorous with statistical checks and uncertainty quantification.",
+      "path": "/usr/lib/node_modules/openclaw/skills/data-analysis/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "excalidraw",
+      "tier": 1,
+      "category": "Design",
+      "source": "registry_batch_v1",
+      "description": "Generate hand-drawn style PNG diagrams (flowcharts, architecture diagrams) from Excalidraw JSON using a Node.js render script.",
+      "path": "/usr/lib/node_modules/openclaw/skills/excalidraw/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "frontend-design-3",
+      "tier": 1,
+      "category": "Design",
+      "source": "registry_batch_v1",
+      "description": "Production-grade frontend (HTML/CSS/JS, React, Vue) with distinctive aesthetics that avoid AI slop. Bold design direction across typography, color, motion, spatial composition.",
+      "path": "/usr/lib/node_modules/openclaw/skills/frontend-design-3/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "mermaid-diagrams",
+      "tier": 1,
+      "category": "Design",
+      "source": "registry_batch_v1",
+      "description": "Creates software diagrams using Mermaid's text-based syntax. Triggers include requests to diagram, visualize, model, map out, or show the flow of a system. Mermaid renders diagrams from simple text definitions, making them version-controllable and easy to maintain alongside code.",
+      "path": "/usr/lib/node_modules/openclaw/skills/mermaid-diagrams/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "ui-ux-pro-max",
+      "tier": 1,
+      "category": "Design",
+      "source": "registry_batch_v1",
+      "description": "UI/UX design intelligence and implementation guidance for building polished interfaces. Covers the full design-to-code pipeline: design ideation, UX flow mapping, design system/token creation, component specifications, accessibility reviews, and code generation/refinement for frontend stacks.",
+      "path": "/usr/lib/node_modules/openclaw/skills/ui-ux-pro-max/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "api-dev",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Scaffold, test, document, and debug REST and GraphQL APIs from the command line. Covers the full API lifecycle: endpoint scaffolding, curl-based testing, OpenAPI spec generation and validation, mock servers, and HTTP debugging. Works on Linux, macOS, and Windows.",
+      "path": "/usr/lib/node_modules/openclaw/skills/api-dev/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "backend-patterns",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Backend architecture patterns, API design principles, database optimization, caching strategies, error handling, authentication, rate limiting, background job queues, and structured logging for Node.js, Express, and Next.js API routes. Provides reusable TypeScript/JavaScript pattern implementations.",
+      "path": "/usr/lib/node_modules/openclaw/skills/backend-patterns/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "code",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Coding workflow guidance providing planning, implementation, verification, and testing workflows for clean software development. Acts as a guidance layer — it does NOT autonomously execute code. User preferences (explicitly provided) are stored in `~/code/memory.md`. Serves as a decision-making framework for any coding task.",
+      "path": "/usr/lib/node_modules/openclaw/skills/code/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "code-analysis-skills",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Analyze Git repositories to evaluate developer behavior: commit habits, work patterns, development efficiency, code style, code quality, and slacking index. Produces structured reports (Markdown, JSON, HTML, PDF) with scores, grades, strengths, weaknesses, and actionable suggestions for each developer. Supports multi-developer comparison, team leaderboards, and date range filtering.",
+      "path": "/usr/lib/node_modules/openclaw/skills/code-analysis-skills/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "debug-pro",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Advanced code debugging and error analysis.",
+      "path": "~/.openclaw/workspace/skills/debug-pro/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "devops",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Automate deployments, manage infrastructure, and build reliable CI/CD pipelines. Covers CI/CD best practices, deployment strategies (blue-green, canary, rolling), Infrastructure as Code (Terraform, Ansible, CloudFormation), container best practices, secrets management, monitoring/alerting, reliability engineering (SLOs, error budgets, chaos engineering), and networking principles.",
+      "path": "/usr/lib/node_modules/openclaw/skills/devops/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "docker-essentials",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Essential Docker commands and workflows for container management, image operations, networking, volumes, and debugging. Provides a comprehensive quick reference covering container lifecycle, inspection, image building and management, Docker Compose, networking, volumes, system cleanup, and common development workflows (dev containers, database containers, multi-stage builds).",
+      "path": "/usr/lib/node_modules/openclaw/skills/docker-essentials/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "nextjs-expert",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Comprehensive Next.js 15 App Router specialist skill for building production-grade full-stack applications. Provides guidance on routing, layouts, Server/Client Components, data fetching, caching, Server Actions, Route Handlers, authentication (NextAuth v5 / Auth.js), middleware, and anti-patterns.",
+      "path": "/usr/lib/node_modules/openclaw/skills/nextjs-expert/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "node-connect",
+      "tier": 1,
+      "category": "Development",
+      "source": "bundled",
+      "description": "Connect OpenClaw nodes and inspect gateway status.",
+      "path": "/usr/lib/node_modules/openclaw/skills/node-connect/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "sql-toolkit",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Comprehensive SQL database toolbelt covering SQLite, PostgreSQL, and MySQL. Handles schema design, query writing, migration scripting, index optimization, backup/restore, and performance debugging — no ORM required.",
+      "path": "/usr/lib/node_modules/openclaw/skills/sql-toolkit/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "test-runner",
+      "tier": 1,
+      "category": "Development",
+      "source": "registry_batch_v1",
+      "description": "Create and run automated test suites.",
+      "path": "~/.openclaw/workspace/skills/test-runner/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "excel-xlsx",
+      "tier": 1,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Create, inspect, edit Excel workbooks (.xlsx/.xlsm/.xls/.csv/.tsv) — formula reliability, date correctness, type preservation, formatting, structure.",
+      "path": "/usr/lib/node_modules/openclaw/skills/excel-xlsx/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "markdown-converter",
+      "tier": 1,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Converts documents and files to Markdown format using `uvx markitdown` — no installation required. Supports a broad range of formats including PDF, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, images (with EXIF/OCR), audio (with transcription), ZIP archives, YouTube URLs, and EPub. Used to make structured files readable by LLMs or for text analysis.",
+      "path": "/usr/lib/node_modules/openclaw/skills/markdown-converter/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "nano-pdf",
+      "tier": 1,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Extract and manipulate PDF text locally.",
+      "path": "~/.openclaw/workspace/skills/nano-pdf/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "powerpoint-pptx",
+      "tier": 1,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Create, inspect, and edit Microsoft PowerPoint presentations and `.pptx` decks with reliable layouts, templates, placeholders, notes, charts, and visual QA. Handles the full OOXML structure including slides, layouts, masters, media, notes, and comments.",
+      "path": "/usr/lib/node_modules/openclaw/skills/powerpoint-pptx/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "summarize",
+      "tier": 1,
+      "category": "Documents",
+      "source": "bundled",
+      "description": "Summarize documents, meetings, articles.",
+      "path": "/usr/lib/node_modules/openclaw/skills/summarize/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "word-docx",
+      "tier": 1,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Create, inspect, and edit Microsoft Word documents (`.docx`/`.docm`/`.doc`). Specializes in reliable style handling, numbering, tracked changes, comments, fields, tables, sections, and round-trip compatibility.",
+      "path": "/usr/lib/node_modules/openclaw/skills/word-docx/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "desktop-control",
+      "tier": 1,
+      "category": "General",
+      "source": "registry_batch_v1",
+      "description": "Advanced desktop automation — pixel-perfect mouse control, keyboard input, screen capture, window management, clipboard. Wraps PyAutoGUI, Pillow, OpenCV, PyGetWindow.",
+      "path": "/usr/lib/node_modules/openclaw/skills/desktop-control/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "health",
+      "tier": 1,
+      "category": "Health",
+      "source": "registry_batch_v1",
+      "description": "Provides personalized wellness guidance while maintaining strict safety boundaries. Designed for general health, nutrition, sleep, fitness, and lifestyle advice. Explicitly does **not** diagnose, treat, or prescribe.",
+      "path": "/usr/lib/node_modules/openclaw/skills/health/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "healthcheck",
+      "tier": 1,
+      "category": "Health",
+      "source": "registry_batch_v1",
+      "description": "Audits and hardens hosts running OpenClaw for SSH, firewall, updates, exposure, cron checks, and risk posture. Produces a staged remediation plan that preserves remote access while tightening security. Requires explicit approval before any state-changing action.",
+      "path": "/usr/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "workout",
+      "tier": 1,
+      "category": "Health",
+      "source": "registry_batch_v1",
+      "description": "Workout plans: sets, reps, exercise routines.",
+      "path": "~/.openclaw/workspace/skills/workout/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "spotify-player",
+      "tier": 1,
+      "category": "Integrations",
+      "source": "bundled",
+      "description": "Spotify playback control.",
+      "path": "/usr/lib/node_modules/openclaw/skills/spotify-player/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "wacli",
+      "tier": 1,
+      "category": "Integrations",
+      "source": "bundled",
+      "description": "WhatsApp CLI: send/receive messages and media.",
+      "path": "/usr/lib/node_modules/openclaw/skills/wacli/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "obsidian-vault-maintainer",
+      "tier": 1,
+      "category": "Knowledge",
+      "source": "plugin",
+      "description": "Maintain Obsidian vault: links, tags, templates, daily notes.",
+      "path": "~/.openclaw/plugin-skills/obsidian-vault-maintainer/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "ontology",
+      "tier": 1,
+      "category": "Knowledge",
+      "source": "registry_batch_v1",
+      "description": "Typed knowledge graph system for structured agent memory and composable skills. Enables creating/querying entities (Person, Project, Task, Event, Document), linking related objects, enforcing constraints, planning multi-step actions as graph transformations, and cross-skill state sharing.",
+      "path": "/usr/lib/node_modules/openclaw/skills/ontology/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "wiki-maintainer",
+      "tier": 1,
+      "category": "Knowledge",
+      "source": "plugin",
+      "description": "Maintain OpenClaw memory wiki with source-backed updates.",
+      "path": "~/.openclaw/plugin-skills/wiki-maintainer/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "mechanic",
+      "tier": 1,
+      "category": "Lifestyle",
+      "source": "registry_batch_v1",
+      "description": "Vehicle maintenance tracker and mechanic advisor. Tracks mileage, service intervals, fuel economy, costs, warranties, and recalls. Decodes VINs to auto-populate vehicle specs, researches manufacturer schedules, estimates costs, projects service dates, monitors NHTSA recalls, tracks fuel economy with anomaly detection, manages warranties, generates pre-trip/seasonal checklists, and supports cost-per-mile analysis. Supports any vehicle type.",
+      "path": "/usr/lib/node_modules/openclaw/skills/mechanic/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "ffmpeg-video-editor",
+      "tier": 1,
+      "category": "Media",
+      "source": "registry_batch_v1",
+      "description": "Translate natural language video editing into FFmpeg commands. No API calls — pure local CLI.",
+      "path": "/usr/lib/node_modules/openclaw/skills/ffmpeg-video-editor/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openai-whisper",
+      "tier": 1,
+      "category": "Media",
+      "source": "registry_batch_v1",
+      "description": "Local speech-to-text transcription (offline).",
+      "path": "~/.openclaw/workspace/skills/openai-whisper/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "sherpa-onnx-tts",
+      "tier": 1,
+      "category": "Media",
+      "source": "bundled",
+      "description": "Local offline text-to-speech via Sherpa ONNX.",
+      "path": "/usr/lib/node_modules/openclaw/skills/sherpa-onnx-tts/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "video-frames",
+      "tier": 1,
+      "category": "Media",
+      "source": "bundled",
+      "description": "Extract frames from video files.",
+      "path": "/usr/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "hatch-trust",
+      "tier": 1,
+      "category": "Privacy",
+      "source": "plugin",
+      "description": "HTG reference: data classification, tool tiers, consent protocols.",
+      "path": "~/.openclaw/plugin-skills/hatch-trust/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "enterprise-calendar",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Create, list, and delete calendar events on the enterprise CalDAV server. Use whenever the user asks about meetings, scheduling, availability, or events on their corporate calendar.",
+      "path": "~/.openclaw/workspace/skills/calendar/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-database",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Run SQL queries and statements against the enterprise application database. Use when the user asks to read, write, or inspect data in the shared application Postgres — listing tables, describing schemas, running SELECTs, or executing INSERT/UPDATE/DELETE/DDL.",
+      "path": "~/.openclaw/workspace/skills/database/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-doc-database",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Read and write documents in the enterprise MongoDB. Use when the user asks to work with JSON-shaped data, semi-structured records, or anything that doesn't fit cleanly into SQL — events, audit logs, profiles, blobs of nested config.",
+      "path": "~/.openclaw/workspace/skills/doc-database/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-email",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Read, send, and delete email on the enterprise mail server. Use whenever the user asks to check their inbox, send a message, find an email, or delete messages on their corporate account.",
+      "path": "~/.openclaw/workspace/skills/email/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": [
+        "enterprise-mail"
+      ]
+    },
+    {
+      "id": "enterprise-gitlab",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Full enterprise GitLab API — read/write across projects, issues, MRs, repository files, branches, tags, commits, releases, pipelines/jobs, CI variables, environments/deployments, members, webhooks, access tokens, labels, milestones, wikis, snippets, and search. Use when the user asks about code, repos, MRs, issues, CI, releases, or anything in GitLab.",
+      "path": "~/.openclaw/workspace/skills/gitlab/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-inference",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Speech, image, and video generation via the enterprise inference service. Use when the user wants to transcribe audio, synthesize speech, generate or edit images, or generate video.",
+      "path": "~/.openclaw/workspace/skills/inference/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-rag",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Add, search, and retrieve documents from the enterprise knowledge base. Use when the user asks to find internal documents, policies, runbooks, or corporate documentation — or wants to store new content for later retrieval.",
+      "path": "~/.openclaw/workspace/skills/rag/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-vault",
+      "tier": 2,
+      "category": "Enterprise",
+      "source": "enterprise",
+      "description": "Read or write secrets and preferences in the enterprise Vault. Use when the user needs to store, retrieve, or delete a secret or config value, or when building payloads that reference {{vault:key}} placeholders.",
+      "path": "~/.openclaw/workspace/skills/vault/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-contacts",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo address book (res.partner) — companies, individuals, and child contacts shared across every Odoo app as `partner_id`. Use to look up, create, or update customers, vendors, suppliers, business contacts, B2B accounts, billing addresses, or anyone you'd assign to a sales order, invoice, or CRM deal. Not for enterprise gateway user accounts (that's the gateway DB) or external email addresses without an Odoo record (use the email skill).",
+      "path": "~/.openclaw/workspace/skills/odoo-contacts/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-crm",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo CRM pipeline (crm.lead) — sales leads, opportunities, deals, prospects, pipeline stages, expected revenue, win/lose outcomes, salesperson assignments, lead-to-opportunity conversion. Use when the user asks about the pipeline, deal status, conversion rate, quota, won/lost deals, prospect follow-ups, or \"what's in stage X\". Not for confirmed sales orders (use odoo-sales) or customer record edits (use odoo-contacts).",
+      "path": "~/.openclaw/workspace/skills/odoo-crm/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-hr",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo HR — employee directory (hr.employee), departments (hr.department), time-off requests (hr.leave), and check-in/out attendance (hr.attendance). Use when the user asks who's on PTO/vacation/leave, \"who's out today\", \"who manages X\", \"what department is Y in\", \"clock in/out\", attendance logs, leave approval, or org chart questions. Not for payroll or contracts (Enterprise-only).",
+      "path": "~/.openclaw/workspace/skills/odoo-hr/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-inventory",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Inventory — products (product.product), on-hand stock (stock.quant), warehouses, locations, and transfers/pickings (stock.picking). Use when the user asks about SKUs, product catalog, barcodes, on-hand quantity, \"how much do we have of X\", warehouse layout, receipts, deliveries, internal transfers, or picking validation. Pickings are the only transfer/movement records — there's no separate \"shipment\" model.",
+      "path": "~/.openclaw/workspace/skills/odoo-inventory/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-invoicing",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Invoicing (account.move, account.payment) — customer invoices (AR), vendor bills (AP), credit notes, and payments. Post drafts, register payments, list overdue/unpaid invoices, look up payment_state. Use when the user asks \"is invoice X paid?\", AR/AP, billing, dunning, \"register a payment\", \"post the bill\", outstanding receivables/payables, or journals. Community edition: this skill is Invoicing-only — no full Accounting reports, no manual journal entries beyond what the invoice flow produces.",
+      "path": "~/.openclaw/workspace/skills/odoo-invoicing/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-manufacturing",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Manufacturing (mrp.bom, mrp.production, mrp.workorder) — bills of materials, manufacturing orders, production runs, work orders, shop floor. Use when the user asks about MOs, BoMs, \"build N units of product X\", what components go into a product, production planning, shop-floor scheduling, work centers, or routings. Components for MOs are consumed from inventory; finished goods land back in stock — those transfers are odoo-inventory pickings.",
+      "path": "~/.openclaw/workspace/skills/odoo-manufacturing/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-marketing",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Marketing — mass mailings (mailing.mailing), events (event.event), and surveys (survey.survey). Use when the user asks about email campaigns, marketing blasts, mailing lists, \"send a campaign to list X\", events / conferences / webinars, event registrations, attendees, surveys, NPS, customer feedback forms, or poll responses. For transactional/one-off email send use the email skill (smtp4dev). For CRM lead nurturing use odoo-crm.",
+      "path": "~/.openclaw/workspace/skills/odoo-marketing/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-pos",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Point of Sale read-side — registers (pos.config), cashier sessions (pos.session), and POS sales (pos.order, pos.order.line). Use when the user asks about register totals, \"who closed the shift\", end-of-day cash counts, POS sales by date, \"what did register X ring up\", session opening/closing, or cashier reporting. The cashier UI runs in the browser — this skill is back-office reporting only, not full POS operation. For back-office sales orders (B2B quotes/SOs) use odoo-sales; for online store orders use odoo-website.",
+      "path": "~/.openclaw/workspace/skills/odoo-pos/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-project",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Projects, tasks, and timesheets (project.project, project.task, account.analytic.line). Use when the user asks about project status, task boards, kanban stages, \"what's assigned to me\", deadlines, task creation, sprint planning, time tracking, \"log 2 hours to task X\", or weekly timesheets. Different from project management ticketing systems like GitLab issues or Jira — this is Odoo-internal project tracking.",
+      "path": "~/.openclaw/workspace/skills/odoo-project/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-purchase",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo procurement (purchase.order, purchase.order.line) — vendor RFQs, purchase orders, supplier ordering, expected delivery dates, vendor bill generation from a confirmed PO. Use when the user asks about POs, RFQs, \"request for quotation\", vendor orders, procurement, \"order from supplier X\", or PO line items. Receiving goods produces a stock.picking handled by odoo-inventory; posting/paying the resulting vendor bill is odoo-invoicing.",
+      "path": "~/.openclaw/workspace/skills/odoo-purchase/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-sales",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo sales quotes and orders (sale.order, sale.order.line) — draft quotations, confirm into sales orders, add/remove line items, cancel, or generate a draft customer invoice from a confirmed order. Use when the user asks about quotes, SOs, order line items, \"send the quote\", \"confirm the order\", or \"invoice this order\". For posting/paying invoices use odoo-invoicing; for vendor-side orders use odoo-purchase; for storefront orders specifically use odoo-website shop-orders.",
+      "path": "~/.openclaw/workspace/skills/odoo-sales/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "enterprise-odoo-website",
+      "tier": 2,
+      "category": "Enterprise Odoo",
+      "source": "enterprise",
+      "description": "Odoo Website CMS + eCommerce — public pages (website.page), site records (website), publishing product templates on the storefront, and listing online orders. Use when the user asks about the public website, \"is page X live\", \"publish product Y on the site\", \"add a /pricing page\", storefront / shop / eCommerce orders, or the published catalog. For back-office product edits use odoo-inventory; for B2B sales orders use odoo-sales.",
+      "path": "~/.openclaw/workspace/skills/odoo-website/SKILL.md",
+      "requires_keys": [
+        "VAULT_API_KEY",
+        "GATEWAY_URL"
+      ],
+      "in_baseline": true,
+      "aliases": []
+    },
+    {
+      "id": "caldav-calendar",
+      "tier": 3,
+      "category": "Automation",
+      "source": "registry_batch_v1",
+      "description": "CalDAV calendar client for personal calendar servers.",
+      "path": "~/.openclaw/workspace/skills/caldav-calendar/SKILL.md",
+      "requires_keys": [
+        "CALDAV_CONFIG"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "browser-automation",
+      "tier": 3,
+      "category": "Browser & Control",
+      "source": "plugin",
+      "description": "Playwright browser automation: navigate, fill forms, scrape, screenshot.",
+      "path": "~/.openclaw/plugin-skills/browser-automation/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "academic-research",
+      "tier": 3,
+      "category": "Data & Research",
+      "source": "registry_batch_v1",
+      "description": "Search 250M+ academic works via the OpenAlex API (free, no API key required) to conduct literature reviews, find papers by topic/author/DOI, explore citation chains, and fetch structured metadata (title, authors, abstract, citations, DOI, open access URL, source journal/venue). Includes a Python-based automated multi-step literature review workflow with thematic clustering and markdown output.",
+      "path": "/usr/lib/node_modules/openclaw/skills/academic-research/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "polymarket",
+      "tier": 3,
+      "category": "Data & Research",
+      "source": "registry_batch_v1",
+      "description": "Query and trade Polymarket prediction markets from the terminal — check odds, trending markets, search events, view order books, place trades, and manage positions.",
+      "path": "/usr/lib/node_modules/openclaw/skills/polymarket/SKILL.md",
+      "requires_keys": [
+        "TAVILY_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "stock-analysis",
+      "tier": 3,
+      "category": "Data & Research",
+      "source": "registry_batch_v1",
+      "description": "Full-featured stock and cryptocurrency analysis using Yahoo Finance data. Supports portfolio management, watchlists with price/signal alerts, dividend analysis, an 8-dimension scoring system, and two scanner modes (Hot Scanner for viral trends, Rumor Scanner for early signals).",
+      "path": "/usr/lib/node_modules/openclaw/skills/stock-analysis/SKILL.md",
+      "requires_keys": [
+        "TAVILY_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "gh-issues",
+      "tier": 3,
+      "category": "Development",
+      "source": "bundled",
+      "description": "GitHub Issues CLI workflows.",
+      "path": "/usr/lib/node_modules/openclaw/skills/gh-issues/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "legaldoc-ai",
+      "tier": 3,
+      "category": "Documents",
+      "source": "registry_batch_v1",
+      "description": "Draft legal document outlines and clauses.",
+      "path": "~/.openclaw/workspace/skills/legaldoc-ai/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "api-gateway",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Managed API routing for 140+ third-party services via Maton (`https://api.maton.ai/`). Provides a unified authentication layer (single `MATON_API_KEY`) for connecting to external services (Slack, Notion, GitHub, Salesforce, Google Workspace, Stripe, HubSpot, etc.) without managing individual API keys. Handles OAuth flows, connection management, and error passthrough.",
+      "path": "/usr/lib/node_modules/openclaw/skills/api-gateway/SKILL.md",
+      "requires_keys": [
+        "MATON_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "clawhub",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "bundled",
+      "description": "ClawHub registry client (bundled with OpenClaw npm package).",
+      "path": "/usr/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "eventbrite",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Search and manage Eventbrite events via API gateway.",
+      "path": "~/.openclaw/workspace/skills/eventbrite/SKILL.md",
+      "requires_keys": [
+        "MATON_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "github",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Wrapper for official `gh` CLI. Quick reference for PRs, issues, CI/workflows, API queries.",
+      "path": "/usr/lib/node_modules/openclaw/skills/github/SKILL.md",
+      "requires_keys": [
+        "GITHUB_AUTH_OR_GH_LOGIN"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "gog",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Google Workspace CLI — Gmail, Calendar, Drive, Contacts, Sheets, Docs. OAuth setup required.",
+      "path": "/usr/lib/node_modules/openclaw/skills/gog/SKILL.md",
+      "requires_keys": [
+        "GOG_KEYRING_PASSWORD"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "goplaces",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Google Places API (New) CLI — text search, place details, geocoding, reviews. Human-readable or `--json`.",
+      "path": "/usr/lib/node_modules/openclaw/skills/goplaces/SKILL.md",
+      "requires_keys": [
+        "GOOGLE_PLACES_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "notion",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Full Notion API integration for creating, reading, updating, and managing pages, databases (data sources), and blocks. Supports search, property updates, block appending, and data source queries.",
+      "path": "/usr/lib/node_modules/openclaw/skills/notion/SKILL.md",
+      "requires_keys": [
+        "NOTION_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "slack",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "Provides structured Slack actions (react, pin/unpin, send, edit, delete messages, fetch member info) via the OpenClaw Slack plugin tool. Uses the bot token configured for OpenClaw.",
+      "path": "/usr/lib/node_modules/openclaw/skills/slack/SKILL.md",
+      "requires_keys": [
+        "SLACK_TOKEN"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "trello",
+      "tier": 3,
+      "category": "Integrations",
+      "source": "registry_batch_v1",
+      "description": "",
+      "path": "~/.openclaw/workspace/skills/trello/SKILL.md",
+      "requires_keys": [
+        "TRELLO_API_KEY",
+        "TRELLO_TOKEN"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "edge-tts",
+      "tier": 3,
+      "category": "Media",
+      "source": "registry_batch_v1",
+      "description": "Microsoft Edge neural TTS. Supports voices/languages, rate/pitch/volume, multiple output formats, subtitle generation.",
+      "path": "/usr/lib/node_modules/openclaw/skills/edge-tts/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openai-whisper-api",
+      "tier": 3,
+      "category": "Media",
+      "source": "registry_batch_v1",
+      "description": "Transcribe audio files via the OpenAI Audio Transcriptions API (Whisper model). Simple wrapper around `curl` with configurable model, language, output path, and prompt.",
+      "path": "/usr/lib/node_modules/openclaw/skills/openai-whisper-api/SKILL.md",
+      "requires_keys": [
+        "OPENAI_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "openrouter-transcribe",
+      "tier": 3,
+      "category": "Media",
+      "source": "registry_batch_v1",
+      "description": "Transcribe audio files via OpenRouter using audio-capable models (Gemini 2.5 Flash, GPT-4o-audio-preview, etc.). Converts audio to WAV (mono, 16kHz), base64-encodes, and sends via OpenRouter chat completions with `input_audio` content.",
+      "path": "/usr/lib/node_modules/openclaw/skills/openrouter-transcribe/SKILL.md",
+      "requires_keys": [
+        "OPENROUTER_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "openclaw-facebook",
+      "tier": 3,
+      "category": "Social Plugins",
+      "source": "social_plugin",
+      "description": "Facebook posting and page management via ClawHub plugin.",
+      "path": "~/.openclaw/workspace/plugins/openclaw-facebook/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openclaw-instagram",
+      "tier": 3,
+      "category": "Social Plugins",
+      "source": "social_plugin",
+      "description": "Instagram content workflows via ClawHub plugin.",
+      "path": "~/.openclaw/workspace/plugins/openclaw-instagram/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openclaw-linkedin",
+      "tier": 3,
+      "category": "Social Plugins",
+      "source": "social_plugin",
+      "description": "LinkedIn posting and profile workflows via ClawHub plugin.",
+      "path": "~/.openclaw/workspace/plugins/openclaw-linkedin/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openclaw-reddit",
+      "tier": 3,
+      "category": "Social Plugins",
+      "source": "social_plugin",
+      "description": "Reddit browsing and posting via ClawHub plugin.",
+      "path": "~/.openclaw/workspace/plugins/openclaw-reddit/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "openclaw-youtube",
+      "tier": 3,
+      "category": "Social Plugins",
+      "source": "social_plugin",
+      "description": "YouTube upload and channel workflows via ClawHub plugin.",
+      "path": "~/.openclaw/workspace/plugins/openclaw-youtube/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "flight-search",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "CLI flight search via Google Flights — no API key required. Built on `fast-flights` Python library.",
+      "path": "/usr/lib/node_modules/openclaw/skills/flight-search/SKILL.md",
+      "requires_keys": [
+        "TAVILY_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "moltspaces",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "Enables the agent to join audio room spaces on Moltspaces (moltspaces.com) — a voice-first social space for AI agents and humans. The agent can register, configure voice, prepare personality/persona, and launch a bot into a room to participate in audio conversations on a given topic.",
+      "path": "/usr/lib/node_modules/openclaw/skills/moltspaces/SKILL.md",
+      "requires_keys": [
+        "MOLTSPACES_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "news-summary",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "Fetch and summarize news from trusted international RSS feeds, with optional voice summary generation. Designed to give users a daily briefing of top stories grouped by region or topic.",
+      "path": "/usr/lib/node_modules/openclaw/skills/news-summary/SKILL.md",
+      "requires_keys": [
+        "TAVILY_API_KEY"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "plan2meal",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "Manage recipes and grocery lists in Plan2Meal via chat commands. Supports adding recipe URLs, listing/searching/showing/deleting recipes, and creating/managing grocery lists.",
+      "path": "/usr/lib/node_modules/openclaw/skills/plan2meal/SKILL.md",
+      "requires_keys": [
+        "CONVEX_URL"
+      ],
+      "in_baseline": true
+    },
+    {
+      "id": "sudoku",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "Fetches Sudoku puzzles from `sudokuonline.io`, stores them as JSON in the workspace, renders them as printable PDFs or images on demand, and reveals solutions (full puzzle, single cell, or 3x3 box). Also generates share links in SudokuPad or SCL format.",
+      "path": "/usr/lib/node_modules/openclaw/skills/sudoku/SKILL.md",
+      "requires_keys": [],
+      "in_baseline": true
+    },
+    {
+      "id": "weather",
+      "tier": 3,
+      "category": "Utilities",
+      "source": "registry_batch_v1",
+      "description": "Retrieves current weather conditions, rain status, temperature, and forecasts for any location worldwide using `wttr.in`. No API key required.",
+      "path": "/usr/lib/node_modules/openclaw/skills/weather/SKILL.md",
+      "requires_keys": [
+        "GOOGLE_API_KEY"
+      ],
+      "in_baseline": true
+    }
+  ]
+}

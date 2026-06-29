@@ -1,0 +1,18 @@
+BEGIN:VCARD
+VERSION:4.0
+FN:Brandon Donovan
+N:Donovan;Brandon;;;
+ORG:Quantum Labs
+EMAIL:brandon.donovan@example-personas.test
+TEL;TYPE=cell:+1 (753) 997-9689
+NOTE:self
+END:VCARD
+BEGIN:VCARD
+VERSION:4.0
+FN:Nadia Naidoo
+N:Naidoo;Nadia;;;
+ORG:Horizon Analytics
+EMAIL:nadia.naidoo@example-personas.test
+TEL;TYPE=cell:+27 80 321 3452
+NOTE:family
+END:VCARD

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      :root {
+        --bg: #0f1117;
+        --surface: #1a1d27;
+        --surface2: #242836;
+        --border: #2e3345;
+        --text: #e4e6f0;
+        --text2: #8b90a5;
+        --accent: #6c7cff;
+        --accent2: #4f5bdb;
+        --green: #34d399;
+        --orange: #fb923c;
+        --red: #f87171;
+        --radius: 10px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header h1 {
+        font-size: 18px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .header .stats {
+        font-size: 13px;
+        color: var(--text2);
+        margin-left: auto;
+      }
+
+      .breadcrumb {
+        padding: 12px 24px;
+        font-size: 13px;
+        color: var(--text2);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+      }
+      .breadcrumb span { cursor: pointer; color: var(--accent); }
+      .breadcrumb span:hover { text-decoration: underline; }
+      .breadcrumb .sep { color: var(--text2); cursor: default; }
+      .breadcrumb .current { color: var(--text); cursor: default; }
+
+      .toolbar {
+        padding: 12px 24px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .search-box {
+        flex: 1;
+        min-width: 200px;
+        max-width: 400px;
+        position: relative;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 8px 12px 8px 36px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .search-box input:focus { border-color: var(--accent); }
+      .search-box .icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text2);
+        font-size: 14px;
+      }
+      .view-toggle {
+        display: flex;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .view-toggle button {
+        background: var(--surface);
+        border: none;
+        color: var(--text2);
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.15s;
+      }
+      .view-toggle button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      .view-toggle button:hover:not(.active) { color: var(--text); }
+
+      .container { padding: 0 24px 24px; }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
+      }
+      .grid .item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px;
+        cursor: pointer;
+        transition: all 0.15s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+      }
+      .grid .item:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(108, 124, 255, 0.1);
+      }
+      .grid .item .icon { font-size: 36px; }
+      .grid .item .name {
+        font-size: 13px;
+        word-break: break-word;
+        max-height: 3em;
+        overflow: hidden;
+      }
+      .grid .item .meta {
+        font-size: 11px;
+        color: var(--text2);
+      }
+
+      .list-view .item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 4px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .list-view .item:hover {
+        border-color: var(--accent);
+        background: var(--surface2);
+      }
+      .list-view .item .icon { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
+      .list-view .item .name { flex: 1; font-size: 14px; word-break: break-word; }
+      .list-view .item .meta { font-size: 12px; color: var(--text2); white-space: nowrap; }
+      .list-view .item .path { font-size: 11px; color: var(--text2); margin-left: 8px; }
+
+      .preview-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .preview-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+      .preview-header h3 {
+        font-size: 15px;
+        font-weight: 500;
+        word-break: break-all;
+      }
+      .preview-header .actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .btn {
+        padding: 6px 14px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--surface2);
+        color: var(--text);
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.15s;
+      }
+      .btn:hover { border-color: var(--accent); color: var(--accent); }
+      .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .btn-primary:hover { background: var(--accent2); }
+      .preview-body {
+        padding: 20px;
+        overflow: auto;
+        flex: 1;
+      }
+      .preview-body img {
+        max-width: 100%;
+        max-height: 60vh;
+        border-radius: 8px;
+      }
+      .preview-body pre {
+        background: var(--bg);
+        padding: 14px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 60vh;
+      }
+      .preview-body iframe {
+        width: 100%;
+        height: 60vh;
+        border: none;
+        border-radius: 8px;
+      }
+
+      .landing {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        gap: 20px;
+        text-align: center;
+        padding: 24px;
+      }
+      .landing h1 { font-size: 28px; }
+      .landing p { color: var(--text2); max-width: 500px; }
+      .landing input {
+        width: 100%;
+        max-width: 500px;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 15px;
+        outline: none;
+      }
+      .landing input:focus { border-color: var(--accent); }
+
+      .spinner {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text2);
+      }
+      .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+      .hidden { display: none !important; }
+
+      @media (max-width: 600px) {
+        .header { padding: 12px 16px; }
+        .toolbar, .container { padding-left: 16px; padding-right: 16px; }
+        .breadcrumb { padding: 10px 16px; }
+        .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Landing Page (no folder ID) -->
+    <div id="landing" class="landing hidden">
+      <div style="font-size: 52px">&#128193;</div>
+      <h1>Drive File Viewer</h1>
+      <p>
+        Paste a Google Drive folder link or ID below to browse its contents.
+        You can view, preview, and download any file.
+      </p>
+      <input
+        id="folderInput"
+        placeholder="Paste folder link or ID..."
+        onkeydown="if(event.key==='Enter') goToFolder()"
+      />
+      <button class="btn btn-primary" onclick="goToFolder()" style="padding: 10px 28px; font-size: 15px">
+        Open Folder
+      </button>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="hidden">
+      <div class="header">
+        <h1 id="folderTitle">&#128193; Drive File Viewer</h1>
+        <div class="stats" id="statsBar"></div>
+      </div>
+
+      <div class="breadcrumb" id="breadcrumb"></div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="icon">&#128269;</span>
+          <input
+            id="searchInput"
+            placeholder="Search files..."
+            oninput="handleSearch(this.value)"
+          />
+        </div>
+        <div class="view-toggle">
+          <button id="btnGrid" class="active" onclick="setView('grid')">&#9638; Grid</button>
+          <button id="btnList" onclick="setView('list')">&#9776; List</button>
+        </div>
+      </div>
+
+      <div class="container">
+        <div id="loading" class="empty-state">
+          <div class="spinner"></div>
+          <p style="margin-top: 12px">Loading folder...</p>
+        </div>
+        <div id="content"></div>
+        <div id="searchResults" class="hidden"></div>
+      </div>
+    </div>
+
+    <!-- Preview Overlay -->
+    <div id="previewOverlay" class="preview-overlay hidden" onclick="closePreviewOutside(event)">
+      <div class="preview-panel">
+        <div class="preview-header">
+          <h3 id="previewTitle"></h3>
+          <div class="actions">
+            <a id="previewDownload" class="btn btn-primary" target="_blank">Download</a>
+            <button class="btn" onclick="closePreview()">Close</button>
+          </div>
+        </div>
+        <div class="preview-body" id="previewBody"></div>
+      </div>
+    </div>
+
+    <script>
+      var ROOT_FOLDER_ID = <?= JSON.stringify(rootFolderId) ?>;
+      var currentView = "grid";
+      var navStack = [];
+      var searchTimeout = null;
+
+      window.onload = function () {
+        if (!ROOT_FOLDER_ID) {
+          document.getElementById("landing").classList.remove("hidden");
+        } else {
+          document.getElementById("app").classList.remove("hidden");
+          navigateTo(ROOT_FOLDER_ID, "Root");
+          loadStats(ROOT_FOLDER_ID);
+        }
+      };
+
+      function goToFolder() {
+        var input = document.getElementById("folderInput").value.trim();
+        var folderId = extractFolderId(input);
+        if (folderId) {
+          var url = window.location.href.split("?")[0] + "?folder=" + folderId;
+          window.top.location.href = url;
+        }
+      }
+
+      function extractFolderId(input) {
+        var match = input.match(/folders\/([a-zA-Z0-9_-]+)/);
+        if (match) return match[1];
+        match = input.match(/id=([a-zA-Z0-9_-]+)/);
+        if (match) return match[1];
+        if (/^[a-zA-Z0-9_-]{10,}$/.test(input)) return input;
+        return null;
+      }
+
+      function navigateTo(folderId, folderName) {
+        var loading = document.getElementById("loading");
+        var content = document.getElementById("content");
+        var searchResults = document.getElementById("searchResults");
+
+        loading.classList.remove("hidden");
+        content.innerHTML = "";
+        content.classList.add("hidden");
+        searchResults.classList.add("hidden");
+        document.getElementById("searchInput").value = "";
+
+        navStack.push({ id: folderId, name: folderName });
+        renderBreadcrumb();
+
+        google.script.run
+          .withSuccessHandler(function (data) {
+            loading.classList.add("hidden");
+            content.classList.remove("hidden");
+            renderFolder(data);
+          })
+          .withFailureHandler(function (err) {
+            loading.classList.add("hidden");
+            content.classList.remove("hidden");
+            content.innerHTML =
+              '<div class="empty-state"><div class="icon">&#9888;</div><p>' +
+              err.message +
+              "</p></div>";
+          })
+          .listFolder(folderId);
+      }
+
+      function navigateBack(index) {
+        navStack = navStack.slice(0, index + 1);
+        var target = navStack.pop();
+        navigateTo(target.id, target.name);
+      }
+
+      function renderBreadcrumb() {
+        var bc = document.getElementById("breadcrumb");
+        var html = "";
+        for (var i = 0; i < navStack.length; i++) {
+          if (i > 0) html += '<span class="sep">/</span>';
+          if (i === navStack.length - 1) {
+            html += '<span class="current">' + esc(navStack[i].name) + "</span>";
+          } else {
+            html +=
+              '<span onclick="navigateBack(' + i + ')">' + esc(navStack[i].name) + "</span>";
+          }
+        }
+        bc.innerHTML = html;
+      }
+
+      function loadStats(folderId) {
+        google.script.run
+          .withSuccessHandler(function (stats) {
+            document.getElementById("statsBar").textContent =
+              stats.files + " files | " + stats.folders + " folders | " + formatSize(stats.totalSize);
+          })
+          .getFolderStats(folderId);
+      }
+
+      function renderFolder(data) {
+        var content = document.getElementById("content");
+        var isGrid = currentView === "grid";
+        var cls = isGrid ? "grid" : "list-view";
+        var html = '<div class="' + cls + '">';
+
+        if (data.folders.length === 0 && data.files.length === 0) {
+          content.innerHTML =
+            '<div class="empty-state"><div class="icon">&#128194;</div><p>This folder is empty</p></div>';
+          return;
+        }
+
+        data.folders.forEach(function (f) {
+          html += renderItem(
+            { id: f.id, name: f.name, isFolder: true },
+            isGrid
+          );
+        });
+        data.files.forEach(function (f) {
+          html += renderItem(
+            { id: f.id, name: f.name, mime: f.mime, size: f.size, url: f.url, downloadUrl: f.downloadUrl },
+            isGrid
+          );
+        });
+
+        html += "</div>";
+        content.innerHTML = html;
+      }
+
+      function renderItem(item, isGrid) {
+        var icon = item.isFolder ? "&#128193;" : getFileIcon(item.mime, item.name);
+        var meta = item.isFolder ? "Folder" : formatSize(item.size);
+        var onclick = item.isFolder
+          ? 'navigateTo("' + item.id + '","' + esc(item.name) + '")'
+          : 'openPreview("' + item.id + '","' + esc(item.name) + '","' + (item.mime || "") + '","' + (item.downloadUrl || item.url || "") + '")';
+
+        if (isGrid) {
+          return (
+            '<div class="item" onclick=\'' + onclick + "'>" +
+            '<div class="icon">' + icon + "</div>" +
+            '<div class="name">' + esc(item.name) + "</div>" +
+            '<div class="meta">' + meta + "</div></div>"
+          );
+        }
+
+        var pathHtml = item.path ? '<span class="path">' + esc(item.path) + "</span>" : "";
+        return (
+          '<div class="item" onclick=\'' + onclick + "'>" +
+          '<div class="icon">' + icon + "</div>" +
+          '<div class="name">' + esc(item.name) + pathHtml + "</div>" +
+          '<div class="meta">' + meta + "</div></div>"
+        );
+      }
+
+      function getFileIcon(mime, name) {
+        mime = mime || "";
+        name = (name || "").toLowerCase();
+        if (mime.indexOf("image") === 0) return "&#128247;";
+        if (mime.indexOf("video") === 0) return "&#127909;";
+        if (mime.indexOf("audio") === 0) return "&#127925;";
+        if (mime.indexOf("pdf") !== -1 || name.endsWith(".pdf")) return "&#128196;";
+        if (name.endsWith(".json")) return "&#123;&#125;";
+        if (name.endsWith(".csv") || name.endsWith(".xlsx")) return "&#128202;";
+        if (name.endsWith(".md")) return "&#128221;";
+        if (name.endsWith(".py") || name.endsWith(".js")) return "&#128187;";
+        if (name.endsWith(".html")) return "&#127760;";
+        if (name.endsWith(".zip")) return "&#128230;";
+        if (name.endsWith(".sqlite") || name.endsWith(".db")) return "&#128451;";
+        if (name.endsWith(".txt")) return "&#128196;";
+        if (name.endsWith(".vcf")) return "&#128101;";
+        if (name.endsWith(".ics")) return "&#128197;";
+        if (mime.indexOf("text") === 0) return "&#128196;";
+        return "&#128196;";
+      }
+
+      function openPreview(fileId, fileName, mime, downloadUrl) {
+        document.getElementById("previewTitle").textContent = fileName;
+        var dlBtn = document.getElementById("previewDownload");
+        dlBtn.href = downloadUrl || "#";
+
+        var body = document.getElementById("previewBody");
+        body.innerHTML = '<div style="text-align:center"><div class="spinner"></div><p style="margin-top:8px">Loading preview...</p></div>';
+        document.getElementById("previewOverlay").classList.remove("hidden");
+
+        var ext = fileName.split(".").pop().toLowerCase();
+        var isImage = mime.indexOf("image") === 0 || ["png", "jpg", "jpeg", "gif", "webp", "svg"].indexOf(ext) !== -1;
+        var isText = ["txt", "md", "json", "csv", "py", "js", "html", "xml", "yaml", "yml", "log", "fasta", "vcf", "ics", "ipynb"].indexOf(ext) !== -1
+          || mime.indexOf("text") === 0
+          || mime.indexOf("json") !== -1;
+
+        if (isImage) {
+          google.script.run
+            .withSuccessHandler(function (dataUri) {
+              if (dataUri) {
+                body.innerHTML = '<img src="' + dataUri + '" alt="' + esc(fileName) + '" />';
+              } else {
+                body.innerHTML = '<p>Image too large for inline preview. <a href="' + downloadUrl + '" target="_blank">Download instead</a>.</p>';
+              }
+            })
+            .withFailureHandler(function (err) {
+              body.innerHTML = "<p>Could not load preview: " + esc(err.message) + "</p>";
+            })
+            .getImageBase64(fileId);
+        } else if (isText) {
+          google.script.run
+            .withSuccessHandler(function (text) {
+              if (ext === "json" || mime.indexOf("json") !== -1) {
+                try { text = JSON.stringify(JSON.parse(text), null, 2); } catch (e) {}
+              }
+              body.innerHTML = "<pre>" + esc(text) + "</pre>";
+            })
+            .withFailureHandler(function (err) {
+              body.innerHTML = "<p>Could not load preview: " + esc(err.message) + "</p>";
+            })
+            .getTextContent(fileId);
+        } else if (mime.indexOf("pdf") !== -1 || ext === "pdf") {
+          body.innerHTML =
+            '<iframe src="https://drive.google.com/file/d/' + fileId + '/preview"></iframe>';
+        } else {
+          body.innerHTML =
+            '<div class="empty-state"><div class="icon">' +
+            getFileIcon(mime, fileName) +
+            "</div><p>No inline preview for this file type (" +
+            esc(ext) +
+            ').</p><a href="' +
+            downloadUrl +
+            '" target="_blank" class="btn btn-primary" style="margin-top:12px">Download File</a></div>';
+        }
+      }
+
+      function closePreview() {
+        document.getElementById("previewOverlay").classList.add("hidden");
+        document.getElementById("previewBody").innerHTML = "";
+      }
+
+      function closePreviewOutside(e) {
+        if (e.target === document.getElementById("previewOverlay")) closePreview();
+      }
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closePreview();
+      });
+
+      function handleSearch(query) {
+        clearTimeout(searchTimeout);
+        var content = document.getElementById("content");
+        var searchResults = document.getElementById("searchResults");
+
+        if (!query || query.length < 2) {
+          searchResults.classList.add("hidden");
+          content.classList.remove("hidden");
+          return;
+        }
+
+        searchTimeout = setTimeout(function () {
+          content.classList.add("hidden");
+          searchResults.classList.remove("hidden");
+          searchResults.innerHTML =
+            '<div class="empty-state"><div class="spinner"></div><p style="margin-top:8px">Searching...</p></div>';
+
+          google.script.run
+            .withSuccessHandler(function (results) {
+              if (results.length === 0) {
+                searchResults.innerHTML =
+                  '<div class="empty-state"><div class="icon">&#128269;</div><p>No files found matching "' +
+                  esc(query) +
+                  '"</p></div>';
+                return;
+              }
+
+              var isGrid = currentView === "grid";
+              var cls = isGrid ? "grid" : "list-view";
+              var html =
+                '<p style="color:var(--text2);font-size:13px;margin-bottom:12px">' +
+                results.length +
+                " results</p>" +
+                '<div class="' + cls + '">';
+              results.forEach(function (f) {
+                html += renderItem(
+                  { id: f.id, name: f.name, mime: f.mime, size: f.size, url: f.url, downloadUrl: f.downloadUrl, path: f.path },
+                  isGrid
+                );
+              });
+              html += "</div>";
+              searchResults.innerHTML = html;
+            })
+            .withFailureHandler(function (err) {
+              searchResults.innerHTML =
+                '<div class="empty-state"><p>Search failed: ' + esc(err.message) + "</p></div>";
+            })
+            .searchFiles(ROOT_FOLDER_ID, query);
+        }, 400);
+      }
+
+      function setView(view) {
+        currentView = view;
+        document.getElementById("btnGrid").className = view === "grid" ? "active" : "";
+        document.getElementById("btnList").className = view === "list" ? "active" : "";
+        var content = document.getElementById("content");
+        if (content.querySelector(".grid, .list-view")) {
+          var current = navStack[navStack.length - 1];
+          var lastNav = navStack.pop();
+          navigateTo(lastNav.id, lastNav.name);
+        }
+      }
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+        if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + " MB";
+        return (bytes / 1073741824).toFixed(1) + " GB";
+      }
+
+      function esc(str) {
+        var d = document.createElement("div");
+        d.textContent = str || "";
+        return d.innerHTML;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "persona": "P-0001",
+  "links": [
+    {
+      "with": "P-0237",
+      "with_name": "Nadia Naidoo",
+      "events": [
+        {
+          "date": "2024-03-18",
+          "type": "message",
+          "title": "Sunday Phone Call — Checking In",
+          "location": "Remote (SF / Johannesburg)",
+          "summary": "Nadia called on a Sunday afternoon her time, Sunday morning mine. She was venting about something political at her firm — I mostly listened, which is not my default mode but I've gotten better at it with her. Then she pivoted and asked about my personal life with that particular tone she uses, the one that means she already has an opinion. I deflected. She said my name in that way. We talked for almost two hours and I felt better afterward than I expected to."
+        },
+        {
+          "date": "2024-09-01",
+          "type": "trip",
+          "title": "Nadia Visits SF — Napa Day",
+          "location": "San Francisco / Napa Valley, California",
+          "summary": "Nadia was in town for four days. The centerpiece was a Sunday drive to Napa — three wineries, one genuinely transcendent mountain-site Pinot from a small family producer, and a good-natured argument over who got the last two bottles (she won, correctly). We ate well, argued on day three about my communication habits, resolved it over Thai food and a two-hour conversation, and I drove her to SFO on Monday noon. She told me to actually visit Johannesburg. I said I would. I meant it more than usual."
+        },
+        {
+          "date": "2024-12-27",
+          "type": "message",
+          "title": "Year-End Check-In Call",
+          "location": "Remote (SF / Johannesburg)",
+          "summary": "We talked for an hour the day after Christmas. She told me about her daughters' school stuff, a neighborhood she's considering moving to, and a trip she's planning to Cape Town in March. I told her about the sleep tracking and the Dipsea training run. She said 'so you're becoming a person who takes care of himself.' I wasn't sure if that was a compliment or a dig. Probably both. I told her I was looking at flights to Joburg for spring. She got quiet in the way that means she's pleased but doesn't want to jinx it."
+        }
+      ]
+    }
+  ]
+}

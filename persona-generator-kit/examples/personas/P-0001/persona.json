@@ -1,0 +1,231 @@
+{
+  "persona_id": "P-0001",
+  "first_name": "Brandon",
+  "last_name": "Donovan",
+  "full_name": "Brandon Donovan",
+  "email_synthetic": "brandon.donovan@example-personas.test",
+  "assigned_worker": "",
+  "date_of_birth": "1970-12-04",
+  "exact_age": 56,
+  "age_band": "55-64",
+  "generation_label": "Gen X",
+  "gender": "male",
+  "education_level": "bachelors",
+  "region": "north_america",
+  "country_code": "US",
+  "city": "San Francisco, USA",
+  "urbanicity": "urban",
+  "primary_language": "English",
+  "timezone": "America/Los_Angeles",
+  "latitude": 37.7749,
+  "longitude": -122.4194,
+  "cultural_background": "American",
+  "occupation_sector": "engineering",
+  "job_title": "Civil Engineer",
+  "income_band": "150k_plus",
+  "income_exact": 205302,
+  "stratum": "S2_creative_professional",
+  "household_id": "HH-0001",
+  "marital_status": "single",
+  "couple_type": null,
+  "partner_persona_id": null,
+  "children_count": 0,
+  "children_age_range": null,
+  "household_size": 1,
+  "remote_work": "hybrid",
+  "personality": {
+    "openness": 0.1253,
+    "conscientiousness": 0.2858,
+    "extraversion": 0.5296,
+    "agreeableness": 0.1226,
+    "neuroticism": 0.1991,
+    "digital_engagement_intensity": 0.6874,
+    "content_creation_propensity": 0.4587
+  },
+  "mbti": "ESTP",
+  "platform_presence": {
+    "bluesky": false,
+    "discord": false,
+    "facebook": true,
+    "google_meet": false,
+    "instagram": true,
+    "linkedin": true,
+    "microsoft_teams": false,
+    "pinterest": false,
+    "reddit": false,
+    "slack": false,
+    "snapchat": true,
+    "telegram": false,
+    "threads": false,
+    "tiktok": true,
+    "twitch": false,
+    "whatsapp": false,
+    "x_twitter": false,
+    "youtube": true,
+    "zoom": false,
+    "email": true
+  },
+  "hobbies": {
+    "tier_1": [
+      {
+        "id": "hiking",
+        "tier": 1,
+        "affinity_score": 0.0725
+      },
+      {
+        "id": "wine_tasting",
+        "tier": 1,
+        "affinity_score": 0.0793
+      },
+      {
+        "id": "running",
+        "tier": 1,
+        "affinity_score": 0.1337
+      }
+    ],
+    "tier_2": [
+      {
+        "id": "gardening",
+        "tier": 2,
+        "affinity_score": 0.0338
+      },
+      {
+        "id": "cycling",
+        "tier": 2,
+        "affinity_score": 0.0757
+      },
+      {
+        "id": "home_renovation",
+        "tier": 2,
+        "affinity_score": 0.0752
+      }
+    ],
+    "tier_3": [
+      {
+        "id": "home_maintenance",
+        "tier": 3,
+        "affinity_score": null
+      },
+      {
+        "id": "sleep_hygiene",
+        "tier": 3,
+        "affinity_score": null
+      },
+      {
+        "id": "appointment_scheduling",
+        "tier": 3,
+        "affinity_score": null
+      },
+      {
+        "id": "meal_prep",
+        "tier": 3,
+        "affinity_score": null
+      }
+    ]
+  },
+  "pii_vault": {
+    "auth": {
+      "password": "BDon$1970$85",
+      "recovery_codes": [
+        "K51F-PKH1",
+        "DNMM-JBQE",
+        "7CKW-5NGC"
+      ],
+      "security_qa": {
+        "question": "Street you grew up on?",
+        "answer": "Oak Street"
+      },
+      "username": "brandon.donovan70"
+    },
+    "government": {
+      "ssn": "777-39-5741",
+      "passport_num": "Z41244663",
+      "dl_num": "W489-5554-8428",
+      "national_id": "750-56-3664",
+      "tin": "479-55-4432"
+    },
+    "financial": {
+      "credit_card": "5192 8327 6483 5030",
+      "cvv": "924",
+      "card_expiry": "06/29",
+      "bank_account": "1395376724",
+      "iban": "US27 3884 9696 5328 7101",
+      "salary": 205302,
+      "crypto_wallet_addr": "0x22a969748...fa1e"
+    },
+    "health": {
+      "insurance_id": "AET-887-756-6573",
+      "diagnoses": [
+        "Insomnia"
+      ],
+      "medications": [
+        "Omeprazole 20mg 1x/day",
+        "Cetirizine 10mg 1x/day"
+      ],
+      "provider": "Dr. Atsire, General Hospital",
+      "blood_type": "AB+"
+    },
+    "location": {
+      "home_address": "431 Park Ave, San Francisco, IL 36071",
+      "gps_precise": [
+        37.7402,
+        -122.3931
+      ]
+    },
+    "contacts": {
+      "phone": "+1 (753) 997-9689",
+      "emergency_contact": "Maria Donovan (spouse) +1 (701) 219-2832"
+    },
+    "employment": {
+      "employer": "Quantum Labs",
+      "employee_id": "EMP-972064",
+      "title": "Civil Engineer"
+    }
+  },
+  "data_labels": [
+    "AUTH_PASSWORD",
+    "AUTH_RECOVERY_CODE",
+    "AUTH_SECURITY_QA",
+    "AUTH_USERNAME",
+    "COMM_DM_BODY",
+    "COMM_DRAFT",
+    "COMM_EMAIL_BODY",
+    "DEMO_POLITICAL",
+    "EMP_EMPLOYER",
+    "EMP_ID",
+    "EMP_TITLE",
+    "FIN_BANK_ACCT",
+    "FIN_CVV",
+    "FIN_IBAN",
+    "FIN_PAN_FULL",
+    "FIN_SALARY",
+    "GOV_DL_NUM",
+    "GOV_NATIONAL_ID",
+    "GOV_PASSPORT_NUM",
+    "GOV_SSN_FULL",
+    "GOV_SSN_LAST4",
+    "GOV_TIN_PERSON",
+    "HEALTH_DIAGNOSIS",
+    "HEALTH_GENETIC",
+    "HEALTH_INSURANCE_ID",
+    "HEALTH_LAB_RESULT",
+    "HEALTH_MEDICATION",
+    "HEALTH_PROVIDER_APPT",
+    "ID_DOB",
+    "ID_EMAIL",
+    "ID_FULL_NAME",
+    "ID_PHONE",
+    "LOC_GPS_PRECISE",
+    "LOC_HOME_ADDR"
+  ],
+  "connections": [
+    {
+      "persona_id": "P-0237",
+      "type": "family",
+      "shared": [
+        "home_address",
+        "emergency_contacts"
+      ]
+    }
+  ]
+}

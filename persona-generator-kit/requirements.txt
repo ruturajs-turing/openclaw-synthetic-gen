@@ -1,0 +1,10 @@
+# Persona Generator Kit dependencies
+#
+# Stage 1 (spine generation) uses ONLY the Python standard library — no install needed.
+# Stage 2 (LLM expansion) needs an LLM client. Anthropic is the default.
+
+anthropic>=0.39.0
+
+# Optional: only if you want to drive Stage 2 through OpenRouter / OpenAI-compatible
+# endpoints instead of Anthropic directly.
+# openai>=1.40.0

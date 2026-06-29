@@ -1,0 +1,39 @@
+# --- secrets (NEVER commit) ---
+Api_Keys
+*.env
+.env*
+*.pem
+*.key
+credentials*.json
+*secret*
+
+# --- generated output / run artifacts ---
+runs/
+**/outputs/
+**/output/
+*.zip
+**/task_embeddings_db/
+*.lance
+**/*.lance/
+_failed/
+
+# --- heavy extracted assets (kept out of git) ---
+_pii_viewer_work/extracted/
+
+# --- confidential docs ---
+Imp_Docs_must_Review/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- os / editors / tooling ---
+.DS_Store
+.idea/
+.vscode/
+node_modules/
