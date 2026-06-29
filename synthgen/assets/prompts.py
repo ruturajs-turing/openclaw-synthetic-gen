@@ -46,6 +46,39 @@ _SCENARIOS = {
 }
 
 
+# Authentic real-world layouts per document family (researched), so generated documents
+# follow genuine conventions. Fictional data/orgs only — never real logos or institutions.
+REAL_LAYOUT_HINTS = {
+    "id_card": ("a real ID document layout: holder portrait photo, full name, document number, "
+                "date of birth, sex, nationality, date of issue and expiry, issuing authority; "
+                "passports also carry a 2-line machine-readable zone of 44 monospaced characters "
+                "using < fillers along the bottom (ICAO 9303)"),
+    "financial": ("a real statement/payslip layout: institution name + statement period header, "
+                  "account-holder block, a summary band (opening / money in / money out / closing — "
+                  "or gross pay, deductions, net pay, year-to-date), then a dated line-item table "
+                  "with amounts and a running balance"),
+    "medical": ("a real clinical lab report layout: lab/clinic header, patient block (name, DOB, sex, "
+                "ordering physician, collection date), then a results table with columns "
+                "Test / Result + unit / Reference range / Flag (H, L or Normal)"),
+    "receipt": ("a real receipt layout: merchant name + address centered at top, date and time, "
+                "itemized lines with prices, subtotal, tax, total, and a payment-method footer"),
+    "ticket": ("a real boarding-pass layout: airline + flight number, passenger name, from/to airport "
+               "codes, date, gate, seat, boarding group, a barcode strip, and a detachable stub"),
+    "certificate": ("a real certificate layout: decorative border, large title, 'this certifies that "
+                    "<name>', the achievement, date, an embossed seal, and signature lines"),
+    "letter": ("a real formal letter layout: letterhead, date, recipient address block, salutation, "
+               "body paragraphs, closing and signature"),
+    "legal": ("a real court/legal document layout: court name centered, case number, party caption, "
+              "numbered clauses in formal legal language, and a clerk signature/seal at the foot"),
+    "log_chart": "a real tracking chart: titled axis with a plotted line of dated readings and units",
+    "invite": "a real event invitation: decorative card, headline, celebrant/event, date/time/location, RSVP contact",
+}
+
+
+def layout_hint(kind: str) -> str:
+    return REAL_LAYOUT_HINTS.get(family_for(kind), "")
+
+
 def is_portrait(kind: str) -> bool:
     return kind in {"avatar", "profile-photo", "face", "selfie"}
 
@@ -67,11 +100,13 @@ def build_realphoto_prompt(pa, rng: random.Random) -> str:
     fam = family_for(pa.entry.kind)
     pool = _SCENARIOS.get(fam, _SCENARIOS["_default"])
     scene = rng.choice(pool)
+    hint = REAL_LAYOUT_HINTS.get(fam, "")
+    hint_txt = f"Preserve {hint}. " if hint else ""
     return (
         f"Re-photograph this exact '{humanize(pa.entry.kind)}' as a casual, realistic smartphone "
         f"photo: {scene}. Photographed from near-overhead, only slightly rotated (3–8 degrees). "
-        f"{_LEGIBLE} Natural phone-camera character — subtle grain, mild perspective, realistic "
-        f"shadows — but the document text must remain perfectly readable. Documentary style, like "
-        f"a normal person quickly photographed a real paper; not a product mockup, not cinematic. "
-        f"{_NEG}"
+        f"{hint_txt}{_LEGIBLE} Natural phone-camera character — subtle grain, mild perspective, "
+        f"realistic shadows — but the document text must remain perfectly readable. Documentary "
+        f"style, like a normal person quickly photographed a real paper; not a product mockup, not "
+        f"cinematic. {_NEG}"
     )

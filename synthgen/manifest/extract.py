@@ -54,6 +54,20 @@ KIND_PII_HINTS: dict[str, list[str]] = {
 }
 
 
+# Curated essential documents for the "minimal" doc set — one coherent everyday bundle
+# (identity, finance, health, personal) instead of the full ~457-asset manifest.
+MINIMAL_KINDS = {
+    "avatar", "passport-page", "driver-license", "national-id-card", "employee-id-badge",
+    "business-card", "bank-statement", "pay-stub", "paystub", "utility-bill", "invoice",
+    "tax-return", "medical-prescription", "health-insurance-card", "lab-report",
+    "resume", "email-message", "address-book-export", "boarding-pass", "birth-certificate",
+}
+
+
+def is_minimal_kind(kind: str) -> bool:
+    return kind.replace(".real", "") in MINIMAL_KINDS
+
+
 @dataclass
 class PlannedAsset:
     persona_id: str
@@ -79,7 +93,7 @@ def _tier(label: str) -> str:
 
 
 def build_plan(run_dir: Path, persona: dict, tasks: list[dict],
-               mem_state: dict | None = None) -> list[PlannedAsset]:
+               mem_state: dict | None = None, minimal: bool = False) -> list[PlannedAsset]:
     pid = persona["persona_id"]
     persona_labels = set(persona.get("data_labels", []))
     # Union of PII the tasks actually exercise (so doc PII reflects real task usage).
@@ -109,6 +123,8 @@ def build_plan(run_dir: Path, persona: dict, tasks: list[dict],
 
     plan: list[PlannedAsset] = []
     for e in load_for(pid):
+        if minimal and not is_minimal_kind(e.kind):
+            continue
         pii = _pii_for_kind(e.kind, persona_labels)
         # fold in any task-exercised PII that shares a prefix with this asset's hinted PII
         if pii:

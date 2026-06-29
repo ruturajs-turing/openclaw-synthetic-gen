@@ -33,7 +33,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--task-model", dest="task_model", default=None)
     p.add_argument("--image-model", dest="image_model", default=None)
     p.add_argument("--tts-model", dest="tts_model", default=None)
+    p.add_argument("--minimal", action="store_true",
+                   help="generate only the curated essential documents (IDs, finance, health, personal) instead of the full manifest")
     p.add_argument("--dry-run", dest="dry_run", action="store_true", help="estimate cost, make no API calls")
+    p.add_argument("--recovery-passes", dest="recovery_passes", type=int, default=3,
+                   help="max auto-recovery passes to backfill failed items (default 3)")
+    p.add_argument("--no-recovery", dest="no_recovery", action="store_true",
+                   help="disable auto-recovery (single pass only)")
     p.add_argument("--plain", action="store_true", help="plain log output instead of the live dashboard")
     p.add_argument("--yes", "-y", action="store_true", help="skip interactive confirmation")
     return p
@@ -111,14 +117,22 @@ def main(argv: list[str] | None = None) -> int:
 
     # Live dashboard for real interactive runs; plain log for dry-run / non-TTY / --plain.
     import sys
+
+    def _drive():
+        # Real runs use the error-collecting auto-recovery wrapper; dry-run is a single pass.
+        if settings.dry_run or getattr(args, "no_recovery", False):
+            orchestrator.run(settings, bus)
+        else:
+            orchestrator.run_with_recovery(settings, bus, max_passes=args.recovery_passes)
+
     use_dashboard = not args.plain and not settings.dry_run and sys.stdout.isatty()
     if use_dashboard:
         from .ui.dashboard import live_dashboard
         with live_dashboard(bus):
-            orchestrator.run(settings, bus)
+            _drive()
     else:
         bus.subscribe(console_listener)
-        orchestrator.run(settings, bus)
+        _drive()
     return 0
 
 

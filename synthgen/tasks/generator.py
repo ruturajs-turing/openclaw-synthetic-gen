@@ -43,12 +43,15 @@ async def _call_once(bus, costs, settings, pid, system_prompt, user_prompt) -> l
     ensure_kit_on_path()
     from response_parser import parse_tasks_response
     from ..llm.call import acall_text
+    from ..llm.route import provider_for, key_for
 
+    model = settings.task_model
+    prov = provider_for(model)
     for attempt in range(1, settings.max_regen_attempts + 1):
         try:
             text = await acall_text(
-                bus, costs, provider="anthropic", model=settings.task_model,
-                system=system_prompt, user=user_prompt, key=settings.anthropic_key,
+                bus, costs, provider=prov, model=model,
+                system=system_prompt, user=user_prompt, key=key_for(settings, model),
                 max_tokens=16384, temperature=None, persona_id=pid, kind="task", bucket="task",
             )
             tasks = parse_tasks_response(text)
@@ -149,9 +152,13 @@ async def generate_all(personas: list[dict], settings: Settings, bus: EventBus,
                     return
             except (json.JSONDecodeError, OSError):
                 pass
-        async with sem:
-            tp = to_task_persona(settings.run_dir, p)
-            results[pid] = await generate_for_persona(tp, settings, bus, costs, embed_store)
+        try:
+            async with sem:
+                tp = to_task_persona(settings.run_dir, p)
+                results[pid] = await generate_for_persona(tp, settings, bus, costs, embed_store)
+        except Exception as e:  # noqa: BLE001 — one persona failing must not abort the stage
+            bus.error(f"{pid}: task generation failed: {type(e).__name__}: {e}", persona_id=pid)
 
-    await asyncio.gather(*(_one(p) for p in personas), return_exceptions=False)
+    # return_exceptions=True so a single persona's crash can't kill the whole batch
+    await asyncio.gather(*(_one(p) for p in personas), return_exceptions=True)
     return results

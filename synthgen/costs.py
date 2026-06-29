@@ -17,9 +17,22 @@ TEXT_RATES = {
     "gpt-4o": (2.5, 10.0),
     "_default": (3.0, 15.0),
 }
-IMAGE_USD_PER_IMAGE = 0.039          # gemini-2.5-flash-image (Nanobanana), ~1 image
+IMAGE_USD_PER_IMAGE = 0.039          # default (gemini-2.5-flash-image / Nanobanana), ~1 image
 TTS_USD_PER_1K_CHARS = 0.015         # gpt-4o-mini-tts, approx
 EMBED_USD_PER_1M_TOKENS = 0.15       # gemini-embedding-001
+
+# Approximate $ per generated image by model (heuristic — for the estimate only).
+IMAGE_MODEL_USD = {
+    "gemini-2.5-flash-image": 0.039,
+    "gemini-3.1-flash-image": 0.04, "gemini-3.1-flash-image-preview": 0.04,
+    "gemini-3-pro-image": 0.12, "gemini-3-pro-image-preview": 0.12,
+    "imagen-4.0-fast-generate-001": 0.02, "imagen-4.0-generate-001": 0.04,
+    "imagen-4.0-ultra-generate-001": 0.06,
+}
+
+
+def image_price(model: str | None) -> float:
+    return IMAGE_MODEL_USD.get(model or "", IMAGE_USD_PER_IMAGE)
 
 # Heuristic token sizes for a dry-run estimate (one API call == one batch of 5 tasks).
 AVG_BATCH_INPUT_TOKENS = 4500
@@ -30,8 +43,28 @@ AVG_PERSONA_EXPAND_OUTPUT = 5000
 AVG_AUDIO_CHARS = 600
 
 
+def _rate_for(model: str) -> tuple[float, float]:
+    """$ per 1M (input, output) tokens, matched by family so versioned ids still price right."""
+    s = (model or "").lower()
+    if "opus" in s:
+        return (15.0, 75.0)
+    if "sonnet" in s:
+        return (3.0, 15.0)
+    if "haiku" in s:
+        return (0.8, 4.0)
+    if s.startswith(("o1", "o3", "o4")):
+        return (15.0, 60.0)
+    if "mini" in s or "nano" in s:
+        return (0.15, 0.6)
+    if "gpt-5" in s:
+        return (5.0, 15.0)
+    if "gpt-4o" in s or s.startswith("gpt-4"):
+        return (2.5, 10.0)
+    return TEXT_RATES["_default"]
+
+
 def _text_cost(model: str, in_tok: int, out_tok: int) -> float:
-    rin, rout = TEXT_RATES.get(model, TEXT_RATES["_default"])
+    rin, rout = _rate_for(model)
     return in_tok / 1_000_000 * rin + out_tok / 1_000_000 * rout
 
 
@@ -73,13 +106,14 @@ class CostModel:
         n_images: int = 0,
         n_audio: int = 0,
         n_pdf: int = 0,
+        image_usd: float = IMAGE_USD_PER_IMAGE,
     ) -> dict:
         persona = num_personas * _text_cost(persona_model, AVG_PERSONA_EXPAND_INPUT, AVG_PERSONA_EXPAND_OUTPUT)
         n_batches = num_personas * max(1, -(-tasks_per_persona // BATCH_SIZE))  # ceil
         task = n_batches * _text_cost(task_model, AVG_BATCH_INPUT_TOKENS, AVG_BATCH_OUTPUT_TOKENS)
         n_tasks = num_personas * tasks_per_persona
         embed = n_tasks * 1500 / 1_000_000 * EMBED_USD_PER_1M_TOKENS  # ~1.5k tokens/task embedded
-        image = n_images * IMAGE_USD_PER_IMAGE
+        image = n_images * image_usd
         audio = n_audio * AVG_AUDIO_CHARS / 1000 * TTS_USD_PER_1K_CHARS
         pdf = 0.0  # reportlab is local/offline, no API cost
         total = persona + task + embed + image + audio + pdf

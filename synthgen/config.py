@@ -63,7 +63,7 @@ class Settings:
     # Stage knobs
     num_personas: int = 1
     tasks_per_persona: int = 20
-    seed: int = 42
+    seed: int | None = None        # None => a fresh random seed per run (set for reproducibility)
     persona_id_width: int = 4
 
     # Models
@@ -83,6 +83,10 @@ class Settings:
     budget_usd: float | None = None       # hard dollar ceiling for the run
     similarity_threshold: float = 0.80
     max_regen_attempts: int = 3
+
+    # Asset scope: "full" = the whole ~457-asset manifest; "minimal" = a curated core set
+    # of essential documents (IDs, finance, health, personal) — far fewer assets + cost.
+    doc_set: str = "full"
 
     # Keys (populated from load_keys)
     keys: dict[str, str] = field(default_factory=dict)
@@ -110,6 +114,8 @@ class Settings:
             val = getattr(args, name, None)
             if val is not None:
                 setattr(s, name, val)
+        if getattr(args, "minimal", False):
+            s.doc_set = "minimal"
         if getattr(args, "run_dir", None):
             s.run_dir = Path(args.run_dir)
         for m in ("persona_model", "task_model", "image_model", "tts_model"):

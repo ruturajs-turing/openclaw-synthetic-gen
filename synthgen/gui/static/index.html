@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Openclaw SynthGen v3.0</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1b2230; --line:#2a3340; --ink:#e6edf3;
+    --muted:#8b97a7; --accent:#178a8a; --green:#2ea043; --red:#e5534b; --amber:#d29922;
+    --blue:#388bfd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg);color:var(--ink);height:100vh;overflow:hidden}
+  .app{display:flex;flex-direction:column;height:100vh}
+  header{display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+  header .logo{font-weight:700;letter-spacing:.5px;color:#fff}
+  header .rid{color:var(--muted)}
+  header input.rid{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:4px 8px;width:130px;font:inherit}
+  .dot{width:9px;height:9px;border-radius:50%;background:#555;display:inline-block}
+  .dot.run{background:var(--amber);box-shadow:0 0 8px var(--amber);animation:pulse 1s infinite}
+  .dot.done{background:var(--green)} .dot.err{background:var(--red)}
+  @keyframes pulse{50%{opacity:.4}}
+  header .cost{margin-left:auto;font-weight:700}
+  .grid{display:grid;grid-template-columns:280px minmax(0,1fr) 360px;flex:1;min-height:0}
+  .col{overflow:auto;padding:14px}
+  .col.left{border-right:1px solid var(--line);background:var(--panel)}
+  .col.right{border-left:1px solid var(--line);background:var(--panel)}
+  h2{font-size:11px;letter-spacing:1px;color:var(--muted);margin:4px 0 10px;text-transform:uppercase}
+  label{display:block;font-size:11px;color:var(--muted);margin:10px 0 3px}
+  input,select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:7px 9px;font:inherit}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button{width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:7px;padding:9px;font:inherit;cursor:pointer;margin-top:10px}
+  button:hover{border-color:var(--accent)}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+  button.danger:hover{border-color:var(--red);color:var(--red)}
+  details.est{margin-top:10px;font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:6px}
+  details.est summary{cursor:pointer;padding:8px 10px;list-style:none;color:var(--ink);font-weight:600}
+  details.est summary::-webkit-details-marker{display:none}
+  details.est summary::before{content:"▸ ";color:var(--muted)}
+  details.est[open] summary::before{content:"▾ "}
+  details.est #est{padding:0 10px 10px}
+  .est b{color:var(--ink)}
+  details{margin-top:8px} summary{cursor:pointer;color:var(--muted);font-size:11px}
+  .stages{list-style:none}
+  .stages li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px}
+  .stages li.active{background:var(--panel2)}
+  .glyph{width:16px;text-align:center}
+  .s-pending .glyph{color:#55606e} .s-running .glyph{color:var(--amber)} .s-done .glyph{color:var(--green)}
+  .bar{height:6px;background:var(--panel2);border-radius:4px;overflow:hidden;margin-top:8px}
+  .bar > i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+  .bar.cost > i{background:linear-gradient(90deg,var(--green),var(--amber))}
+  #log{margin-top:14px;background:#0a0d12;border:1px solid var(--line);border-radius:8px;padding:10px;height:calc(100vh - 320px);overflow:auto;font-size:12px}
+  #log .l{white-space:pre-wrap;color:#c3ccd8;padding:1px 0}
+  #log .l .tag{color:var(--accent)}
+  #log .l.err{color:var(--red)} #log .l.dedup{color:var(--amber)} #log .l.asset{color:var(--green)}
+  table{width:100%;border-collapse:collapse;font-size:11.5px}
+  th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:5px 4px}
+  td{padding:5px 4px;border-bottom:1px solid #1f2632;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  td.usd{text-align:right;color:var(--green)} td.err{color:var(--red);text-align:right}
+  /* API table fits the panel exactly — kind truncates with ellipsis instead of overflowing */
+  table.apitbl{table-layout:fixed}
+  .apitbl th,.apitbl td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .apitbl .cp{width:54px} .apitbl .ck{width:auto} .apitbl .cms{width:46px;text-align:right}
+  .apitbl .cusd{width:52px;text-align:right}
+  /* timing box */
+  .timebox{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;line-height:1.9}
+  .timebox b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .timebox .eta{color:var(--accent)}
+  .inflight{font-weight:700;color:#fff;margin:10px 0 4px}
+  .costbox{margin-top:16px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px}
+  .costbox .big{font-size:22px;font-weight:700}
+  /* persona browser overlay */
+  .overlay{position:fixed;inset:0;background:rgba(8,10,14,.96);display:none;flex-direction:column;z-index:20}
+  .overlay.open{display:flex}
+  .obar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .obar .x{margin-left:auto;width:auto;padding:6px 12px}
+  .obody{flex:1;overflow:auto;padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;align-content:start}
+  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer}
+  .pcard:hover{border-color:var(--accent)}
+  .pcard img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:var(--panel2)}
+  .pcard .nm{font-weight:700;margin-top:8px}
+  .pcard .meta{color:var(--muted);font-size:11px}
+  .detail{display:none;position:fixed;inset:0;background:var(--bg);z-index:30;flex-direction:column}
+  .detail.open{display:flex}
+  .dbody{flex:1;overflow:auto;padding:18px}
+  .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .tabs button{width:auto;margin:0;padding:6px 12px}
+  .tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .gitem{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .gitem img{width:100%;border-radius:6px;background:#fff}
+  .gitem .cap{font-size:11px;color:var(--muted);margin-top:6px;word-break:break-all}
+  pre.doc{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;font-size:12px;color:#c3ccd8}
+  /* errors panel + final banner */
+  .errbox{margin-top:16px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px}
+  .errbox h2{margin:0 0 8px} .errbox .badge{color:var(--red);font-weight:700}
+  #errlist{max-height:160px;overflow:auto;font-size:11px}
+  #errlist .e{color:var(--red);padding:3px 0;border-bottom:1px solid #1f2632;white-space:pre-wrap}
+  #banner{display:none;margin:0 0 12px;padding:12px 14px;border-radius:8px;border:1px solid var(--line);font-weight:600}
+  #banner.ok{background:rgba(46,160,67,.14);border-color:var(--green);color:var(--green)}
+  #banner.partial{background:rgba(210,153,34,.14);border-color:var(--amber);color:var(--amber)}
+  header .tbtn{width:auto;margin:0;padding:5px 10px}
+  /* ---------- light / white theme ---------- */
+  body.light{--bg:#f5f7fa;--panel:#ffffff;--panel2:#eef1f5;--line:#d6dce4;--ink:#1b2330;--muted:#5c6675;--accent:#0f7c7c}
+  body.light #log{background:#fbfcfd}
+  body.light #log .l{color:#33404f}
+  body.light #log .l .tag{color:var(--accent)}
+  body.light td{border-bottom-color:#eef1f5}
+  body.light pre.doc{color:#26303c}
+  body.light .gitem img{background:#fff}
+  body.light input,body.light select,body.light button{background:#fff}
+  body.light button.primary{background:var(--accent);color:#fff}
+  body.light header .logo{color:var(--ink)}
+  body.light header{box-shadow:0 1px 0 var(--line)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <span class="logo">Openclaw SynthGen <span class="muted" style="font-weight:400">v3.0</span></span>
+    <span class="rid">run:</span><input class="rid" id="runId" value="gui">
+    <span class="dot" id="dot"></span><span id="status" class="rid">idle</span>
+    <span class="cost" id="hcost">$0.0000</span>
+    <button class="tbtn" id="btnTheme" title="toggle light/dark">◐ theme</button>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: controls -->
+    <div class="col left">
+      <h2>Controls</h2>
+      <div class="row2">
+        <div><label>personas</label><input id="personas" type="number" value="1" min="1"></div>
+        <div><label>tasks</label><input id="tasks" type="number" value="5" min="1"></div>
+      </div>
+      <div class="row2">
+        <div><label>budget&nbsp;$</label><input id="budget" type="number" value="6" step="0.5"></div>
+        <div><label>max assets</label><input id="maxassets" type="number" placeholder="none"></div>
+      </div>
+      <label>documents</label>
+      <select id="docset">
+        <option value="full">full manifest (~457/persona)</option>
+        <option value="minimal">minimal — essential docs only</option>
+      </select>
+      <label>seed <span class="muted">(blank = random personas)</span></label>
+      <input id="seed" type="number" placeholder="random">
+      <details open>
+        <summary>models…</summary>
+        <label>persona model</label><select id="persona_model"></select>
+        <label>task model</label><select id="task_model"></select>
+        <label>image model</label><select id="image_model"></select>
+        <label>audio (TTS) model</label><select id="tts_model"></select>
+        <div class="muted" id="modelnote" style="font-size:11px;margin-top:6px"></div>
+      </details>
+      <button id="btnEstimate">Recalculate estimate</button>
+      <details class="est" id="estwrap">
+        <summary id="estsum">Cost estimate</summary>
+        <div id="est"></div>
+      </details>
+      <button class="primary" id="btnStart">▶ Start run</button>
+      <button class="danger" id="btnStop">■ Stop</button>
+      <button id="btnReset">↺ Reset cost</button>
+      <button id="btnPersonas">▸ Browse personas</button>
+    </div>
+
+    <!-- CENTER: stages + log -->
+    <div class="col center">
+      <div id="banner"></div>
+      <h2>Stages</h2>
+      <ul class="stages" id="stages"></ul>
+      <div class="bar"><i id="assetbar"></i></div>
+      <h2 style="margin-top:14px">Log</h2>
+      <div id="log"></div>
+    </div>
+
+    <!-- RIGHT: timing + API calls + cost -->
+    <div class="col right">
+      <h2>Timing</h2>
+      <div class="timebox">
+        <div>started&nbsp; <b id="tstart">—</b></div>
+        <div>elapsed&nbsp; <b id="telapsed">00:00</b></div>
+        <div>ETA end&nbsp; <b id="teta" class="eta">—</b></div>
+      </div>
+      <h2>API calls</h2>
+      <div class="inflight">in-flight: <span id="inflight">0</span></div>
+      <table class="apitbl"><thead><tr><th class="cp">prov</th><th class="ck">kind</th><th class="cms">ms</th><th class="cusd">$</th></tr></thead>
+        <tbody id="api"></tbody></table>
+      <div class="costbox">
+        <h2>Cost</h2>
+        <div class="big" id="costbig">$0.0000</div>
+        <div class="rid" id="costsub">budget —</div>
+        <div class="bar cost"><i id="costbar"></i></div>
+      </div>
+      <div class="errbox">
+        <h2>Errors <span class="badge" id="errcount">0</span></h2>
+        <div id="errlist"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- persona browser -->
+<div class="overlay" id="overlay">
+  <div class="obar"><b>Personas</b><span class="rid" id="pcount"></span>
+    <button class="x" onclick="closeOverlay()">✕ close</button></div>
+  <div class="obody" id="plist"></div>
+</div>
+<div class="detail" id="detail">
+  <div class="obar"><b id="dtitle"></b>
+    <button class="x" onclick="document.getElementById('detail').classList.remove('open')">← back</button></div>
+  <div class="dbody">
+    <div class="tabs" id="dtabs"></div>
+    <div id="dcontent"></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const STAGES = ["personas","tasks","memory","extract","assets","package"];
+let es=null, cost=0, budget=null, inflight=0, assetGen=0, assetTotal=0, errs=[], startMs=null, timer=null;
+const STAGE_W={personas:.08, tasks:.32, memory:.02, extract:.03, assets:.5, package:.05};
+function pad(n){return String(n).padStart(2,"0");}
+function fmtDur(ms){ ms=Math.max(0,ms); const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60; return (h?pad(h)+":":"")+pad(m)+":"+pad(ss); }
+function clockOf(ms){ const d=new Date(ms); return pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds()); }
+function progressFrac(){
+  let p=0; for(const s of STAGES){ if(stageState[s]==="done") p+=STAGE_W[s]; }
+  const cur=STAGES.find(s=>stageState[s]==="running");
+  if(cur==="assets" && assetTotal>0) p+=STAGE_W.assets*Math.min(1,assetGen/assetTotal);
+  else if(cur) p+=STAGE_W[cur]*0.4;
+  return Math.min(0.99,p);
+}
+function tick(){ if(!startMs) return; const el=Date.now()-startMs; $("telapsed").textContent=fmtDur(el);
+  const p=progressFrac();
+  if(p>0.03){ const total=el/p; $("teta").textContent=clockOf(startMs+total)+"  (~"+fmtDur(total-el)+" left)"; }
+  else { $("teta").textContent="estimating…"; } }
+function startTimer(){ startMs=Date.now(); $("tstart").textContent=clockOf(startMs);
+  $("telapsed").textContent="00:00"; $("teta").textContent="estimating…";
+  if(timer) clearInterval(timer); timer=setInterval(tick,1000); tick(); }
+function stopTimer(){ if(timer){clearInterval(timer);timer=null;} if(startMs)$("telapsed").textContent=fmtDur(Date.now()-startMs); $("teta").textContent="done"; }
+function shortKind(k){ return (k||"").replace(/^image:/,"").replace(/^audio:/,""); }
+
+function rid(){ return $("runId").value.trim() || "gui"; }
+function body(){
+  const b={run_id:rid(), personas:+$("personas").value, tasks:+$("tasks").value,
+    doc_set:$("docset").value,
+    persona_model:$("persona_model").value, task_model:$("task_model").value,
+    image_model:$("image_model").value, tts_model:$("tts_model").value};
+  if($("budget").value!=="") b.budget_usd=+$("budget").value;
+  if($("maxassets").value!=="") b.max_assets=+$("maxassets").value;
+  if($("seed").value!=="") b.seed=+$("seed").value;
+  return b;
+}
+function renderStages(){
+  $("stages").innerHTML = STAGES.map(s=>{
+    const st = stageState[s]||"pending";
+    const g = st==="done"?"✓":st==="running"?"▶":"·";
+    return `<li class="s-${st} ${st==='running'?'active':''}"><span class="glyph">${g}</span>${s}</li>`;
+  }).join("");
+}
+let stageState={};
+function setDot(c,txt){ $("dot").className="dot "+c; $("status").textContent=txt; }
+function log(msg,cls=""){ const d=$("log"); const e=document.createElement("div");
+  e.className="l "+cls; e.textContent=msg; d.appendChild(e); d.scrollTop=d.scrollHeight;
+  while(d.children.length>400) d.removeChild(d.firstChild); }
+function setCost(v){ cost=v; $("hcost").textContent="$"+v.toFixed(4); $("costbig").textContent="$"+v.toFixed(4);
+  if(budget){ $("costsub").textContent="budget $"+budget.toFixed(2);
+    $("costbar").style.width=Math.min(100,v/budget*100)+"%"; } }
+
+function handle(ev){
+  const t=ev.type, d=ev.data||{};
+  if(t==="run_started"){ stageState={}; renderStages(); setDot("run","running"); startTimer(); log("run started "+(d.run_id||"")); }
+  else if(t==="stage_started"){ stageState[ev.stage]="running"; renderStages(); }
+  else if(t==="stage_finished"){ stageState[ev.stage]="done"; renderStages(); if(ev.msg) log(ev.stage+": "+ev.msg); }
+  else if(t==="api_call_started"){ inflight++; $("inflight").textContent=inflight; }
+  else if(t==="api_call_finished"){ inflight=Math.max(0,inflight-1); $("inflight").textContent=inflight; addApi(d); }
+  else if(t==="cost_update"){ if(d.spent_usd!=null) setCost(d.spent_usd);
+    if(d.total!=null){ showEstimate(d); } }
+  else if(t==="asset_generated"){ assetGen++; updAssetBar(); log("asset ✓ "+(d.path||""),"asset"); }
+  else if(t==="asset_skipped"){ /* quiet */ }
+  else if(t==="dedup_flagged"){ log("dedup ⚠ "+(ev.msg||""),"dedup"); }
+  else if(t==="task_batch_generated"){ log((ev.persona_id||"")+" "+(ev.msg||"")); }
+  else if(t==="persona_generated"){ log("persona ✓ "+(ev.persona_id||"")); }
+  else if(t==="persona_packaged"){ log("packaged "+(ev.persona_id||"")); }
+  else if(t==="error"){ log("ERROR "+(ev.msg||""),"err"); addErr(ev); }
+  else if(t==="log"){ if(ev.msg) log(ev.msg); }
+  else if(t==="run_finished"){
+    if(d.final!==undefined || d.complete!==undefined){ showBanner(d); }
+    setDot(d.error||d.complete===false?"err":"done", d.final?(d.complete?"complete":"partial"):"finished");
+    stopTimer(); log("run finished "+JSON.stringify(d)); refreshAfter();
+  }
+  else if(t==="stream_end"){ if($("dot").className.indexOf("run")>=0){ setDot("done","stopped"); stopTimer(); } refreshAfter(); }
+}
+let apiRows=[];
+function addApi(d){ apiRows.unshift(d); apiRows=apiRows.slice(0,16);
+  $("api").innerHTML=apiRows.map(c=>{ const k=shortKind(c.kind);
+    return `<tr><td class="cp">${escapeHtml(c.provider||"?")}</td>`
+      +`<td class="ck" title="${escapeHtml(c.kind||"")}">${escapeHtml(k)}</td>`
+      +`<td class="cms">${c.latency_ms||""}</td>`
+      +(c.error?`<td class="cusd err">ERR</td>`:`<td class="cusd usd">${(c.usd||0).toFixed(4)}</td>`)+`</tr>`;
+  }).join(""); }
+function updAssetBar(){ if(assetTotal>0) $("assetbar").style.width=Math.min(100,assetGen/assetTotal*100)+"%";
+  else $("assetbar").style.width=Math.min(100,assetGen)+"%"; }
+function showEstimate(d){ const c=d.counts||{};
+  const text=((d.persona||0)+(d.task||0)+(d.embed||0));
+  $("estsum").innerHTML=`Cost estimate&nbsp; <b>≈ $${(d.total||0).toFixed(2)}</b> <span class="muted">(${d.doc_set||"full"})</span>`;
+  $("est").innerHTML=
+    `<div>text&nbsp; $${text.toFixed(3)} <span class="muted">(personas+tasks)</span></div>`
+    +`<div>images&nbsp; ${c.images||0} → $${(d.image||0).toFixed(3)}</div>`
+    +(c.audio?`<div>audio&nbsp; ${c.audio} → $${(d.audio||0).toFixed(3)}</div>`:"")
+    +`<div class="muted" style="margin-top:4px">${c.personas} personas · ${c.tasks} tasks · ${c.task_batches} batches</div>`;
+  assetTotal=(c.images||0)+(c.pdf||0); }
+
+async function doEstimate(){
+  try{ const r=await fetch("/estimate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign(body(),{dry_run:true}))});
+    showEstimate(await r.json()); }catch(_){}
+}
+let estTimer=null;
+function scheduleEstimate(){ clearTimeout(estTimer); estTimer=setTimeout(doEstimate, 300); }
+function addErr(ev){ errs.push(ev); $("errcount").textContent=errs.length;
+  const el=$("errlist"); const e=document.createElement("div"); e.className="e";
+  e.textContent=(ev.persona_id?ev.persona_id+": ":"")+(ev.msg||""); el.appendChild(e); el.scrollTop=el.scrollHeight; }
+function showBanner(d){ const b=$("banner");
+  const ok=d.complete===true; const p=d.personas||{};
+  b.className=ok?"ok":"partial"; b.style.display="block";
+  b.textContent=(ok?"✓ COMPLETE":"⚠ PARTIAL")
+    +`  ·  personas ${p.complete??"?"}/${p.total??"?"}`
+    +(p.failed&&p.failed.length?` (failed: ${p.failed.join(", ")})`:"")
+    +`  ·  ${d.n_errors??0} errors  ·  ${d.passes||1} pass(es)  ·  $${d.cost_usd??cost.toFixed(4)}`; }
+async function start(){
+  $("log").innerHTML=""; apiRows=[]; $("api").innerHTML=""; assetGen=0; cost=0; setCost(0);
+  errs=[]; $("errcount").textContent="0"; $("errlist").innerHTML=""; $("banner").style.display="none";
+  budget = $("budget").value!=="" ? +$("budget").value : null;
+  $("costsub").textContent = budget?("budget $"+budget.toFixed(2)):"budget —";
+  // prefetch the estimate so the ETA has an asset total to work with
+  try{ const r=await fetch("/estimate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign(body(),{dry_run:true}))}); showEstimate(await r.json()); }catch(_){}
+  await fetch("/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body())});
+  setDot("run","running");
+  if(es) es.close();
+  es=new EventSource("/events?run_id="+encodeURIComponent(rid()));
+  es.onmessage=e=>{ try{ handle(JSON.parse(e.data)); }catch(_){} };
+  es.onerror=()=>{};
+}
+async function stop(){ await fetch("/stop",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({run_id:rid()})}); setDot("done","stopping"); }
+async function resetCost(){ await fetch("/reset-cost",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({run_id:rid()})}); setCost(0); log("cost counter reset"); }
+
+/* persona browser */
+function closeOverlay(){ $("overlay").classList.remove("open"); }
+async function browse(){
+  const r=await fetch("/personas?run_id="+encodeURIComponent(rid())); const d=await r.json();
+  $("pcount").textContent=d.personas.length+" personas";
+  $("plist").innerHTML=d.personas.map(p=>{
+    const img=p.has_face?`<img src="/asset?run_id=${rid()}&path=assets/faces/${p.persona_id}.png">`:`<img>`;
+    return `<div class="pcard" onclick="openPersona('${p.persona_id}')">${img}
+      <div class="nm">${p.name}</div><div class="meta">${p.persona_id} · ${p.n_tasks} tasks · ${p.n_docs} docs</div></div>`;
+  }).join("")||"<div class='rid'>No personas yet for this run.</div>";
+  $("overlay").classList.add("open");
+}
+let detail=null;
+async function openPersona(pid){
+  const r=await fetch(`/persona/${pid}?run_id=`+encodeURIComponent(rid())); detail=await r.json();
+  $("dtitle").textContent=(detail.persona&&detail.persona.full_name||pid)+" — "+pid;
+  const tabs=["Documents","MEMORY.md","Tasks","PII index"];
+  $("dtabs").innerHTML=tabs.map((t,i)=>`<button class="${i==0?'on':''}" onclick="tab(${i},this)">${t}</button>`).join("");
+  $("detail").classList.add("open"); tab(0);
+}
+function tab(i,btn){
+  if(btn){ document.querySelectorAll("#dtabs button").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); }
+  const c=$("dcontent");
+  if(i===0){
+    const imgs=detail.docs.filter(d=>["png","jpg","jpeg","svg"].includes(d.ext));
+    const other=detail.docs.filter(d=>!["png","jpg","jpeg","svg"].includes(d.ext));
+    c.innerHTML=`<div class="gallery">`+imgs.map(d=>`<div class="gitem"><a href="${d.url}" target="_blank"><img loading="lazy" src="${d.url}"></a><div class="cap">${d.name}</div></div>`).join("")
+      +`</div><h2 style="margin-top:16px">Other files</h2><div>`+other.map(d=>`<a href="${d.url}" target="_blank" style="color:var(--blue);display:inline-block;margin:4px 10px 4px 0">${d.name}</a>`).join("")+`</div>`;
+  } else if(i===1){ c.innerHTML=`<pre class="doc">${escapeHtml(detail.memory_md||"(none)")}</pre>`; }
+  else if(i===2){ c.innerHTML=`<pre class="doc">${escapeHtml(JSON.stringify(detail.tasks||[],null,2))}</pre>`; }
+  else { c.innerHTML=`<pre class="doc">${escapeHtml(JSON.stringify(detail.pii_index||{},null,2))}</pre>`; }
+}
+function escapeHtml(s){ return (s+"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+function refreshAfter(){ /* hook for auto-refresh of persona list if open */ if($("overlay").classList.contains("open")) browse(); }
+
+function applyTheme(t){ document.body.classList.toggle("light", t==="light"); localStorage.setItem("synthgen-theme", t); }
+$("btnTheme").onclick=()=>applyTheme(document.body.classList.contains("light")?"dark":"light");
+applyTheme(localStorage.getItem("synthgen-theme")||"dark");
+
+// Populate model dropdowns from the live provider model lists.
+function fillModels(selId, items, rec, fallback){
+  const el=$(selId); el.innerHTML="";
+  const list = (items&&items.length)?items:[{id:fallback,label:fallback}];
+  list.forEach(it=>{ const o=document.createElement("option"); o.value=it.id;
+    o.textContent=it.id + (it.tier?"  ·  "+it.tier:"") + (it.id===rec?"   ★ recommended":"");
+    el.appendChild(o); });
+  el.value = (rec && list.some(i=>i.id===rec)) ? rec : (fallback||list[0].id);
+}
+async function loadModels(){
+  let m;
+  try{ m=await (await fetch("/models")).json(); }
+  catch(_){ m={text:[],image:[],tts:[],recommended:{},errors:{load:"failed"}}; }
+  const r=m.recommended||{};
+  fillModels("persona_model", m.text, r.persona, "claude-sonnet-4-6");
+  fillModels("task_model",    m.text, r.task,    "claude-opus-4-8");
+  fillModels("image_model",   m.image, r.image,  "gemini-2.5-flash-image");
+  fillModels("tts_model",     m.tts,  r.tts,     "gpt-4o-mini-tts");
+  const errs=m.errors&&Object.keys(m.errors);
+  $("modelnote").textContent = (errs&&errs.length)
+    ? ("⚠ couldn't list: "+errs.join(", ")+" — using defaults")
+    : (m.text?(m.text.length+" Claude · "+(m.image||[]).length+" image · "+(m.tts||[]).length+" TTS models"):"");
+  scheduleEstimate();  // initial live estimate once models are selected
+}
+// Live cost calculator: recompute whenever any cost-affecting input changes.
+["personas","tasks","docset","persona_model","task_model","image_model"].forEach(id=>{
+  const el=$(id); if(el){ el.addEventListener("change", scheduleEstimate); el.addEventListener("input", scheduleEstimate); }
+});
+loadModels();
+
+$("btnEstimate").onclick=doEstimate;
+$("btnStart").onclick=start;
+$("btnStop").onclick=stop;
+$("btnReset").onclick=resetCost;
+$("btnPersonas").onclick=browse;
+renderStages();
+</script>
+</body>
+</html>

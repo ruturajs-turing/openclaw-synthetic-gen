@@ -58,6 +58,9 @@ python -m synthgen --personas 1 --tasks 5 --budget-usd 6 --run-dir runs/gold
 | `--task-model M` | `claude-opus-4-8` | Model for task generation |
 | `--image-model M` | `gemini-2.5-flash-image` | Nanobanana image model |
 | `--tts-model M` | `gpt-4o-mini-tts` | OpenAI TTS model (audio) |
+| `--minimal` | off | Generate only the curated **essential documents** (IDs, finance, health, personal) instead of the full ~457-asset manifest — far fewer assets + cost |
+| `--recovery-passes N` | 3 | Auto-recovery: max passes to re-run and backfill any failed/missing personas+tasks (collects all errors) |
+| `--no-recovery` | off | Disable auto-recovery (single pass only) |
 | `--dry-run` | off | Walk all stages, print a cost estimate, make **zero** API calls |
 | `--plain` | off | Plain log output instead of the live dashboard (use for non-TTY / logs) |
 | `--yes` / `-y` | off | Skip interactive count prompts |
@@ -135,6 +138,30 @@ python -m synthgen --personas 10 --tasks 20 --run-dir runs/batch1   # ...re-run 
 ```
 
 ---
+
+## 7b. Web GUI (operator console)
+
+```bash
+python -m synthgen.gui            # → http://127.0.0.1:8000   (SYNTHGEN_HOST / SYNTHGEN_PORT to override)
+```
+
+A dark 3-pane operator console (FastAPI backend + browser, no build step):
+- **Controls** (left): personas, tasks, budget, max-assets, models; **Dry-run estimate** + **Start** + **Stop** + **Reset cost**.
+- **Live dashboard** (center/right): stage pipeline, scrolling log, API-call side panel, in-flight count, cost-vs-budget bar — streamed live over SSE.
+- **Persona & asset browser**: pick a persona → tabs for the document/image gallery (clean + `.real` photos), `MEMORY.md`, `tasks.json`, `pii_index.json`.
+
+How it runs: each run is the CLI launched as a subprocess into `runs/<run_id>`; the browser tails that run's `logs/run.log` (JSONL events) over SSE. **Stop** kills the process; **Resume** = start the same `run_id` again (skips finished work); **Reset cost** zeroes `state.json` cost. Asset file serving is path-traversal-guarded to the run dir.
+
+## 7c. Failsafe & recovery
+
+Real runs use an **error-collecting auto-recovery** wrapper (`orchestrator.run_with_recovery`): every stage is idempotent and skips work that already exists, so the pipeline automatically re-runs up to `--recovery-passes` times to backfill anything that failed (e.g. a transient malformed-JSON or rate-limit error), stopping when complete or when a pass makes no progress. Persona expansion retries 3× (JSON + transient API errors); task generation isolates per-persona failures; `.real` image generation falls back to an offline composite on error/over-budget. Every error is collected and written to `run-dir/errors.json`, and a **final result** is written to `run-dir/final_report.json` and emitted as the closing `RUN_FINISHED` event (shown as a banner + errors panel in the GUI):
+
+```json
+{ "complete": true, "passes": 1, "personas": {"total":3,"complete":3,"failed":[]},
+  "n_errors": 0, "cost_usd": 4.99 }
+```
+
+Re-running the same `run-id` always self-heals: it backfills missing personas/assets and never re-pays for completed work.
 
 ## 8. Architecture (for the GUI)
 

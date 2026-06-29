@@ -17,28 +17,46 @@ from ..config import Settings
 
 
 def _expand_one(p: dict, id_to_name: dict, all_personas: dict, settings: Settings,
-                bus: EventBus, costs: CostModel) -> dict:
+                bus: EventBus, costs: CostModel, attempts: int = 3) -> dict:
     pid = p["persona_id"]
     brief = _builders.persona_brief(p, id_to_name)
     user = build_life_pack_prompt(brief, schema_as_text())
-    raw = call_text_for_expand(settings, bus, costs, pid, user)
-    try:
-        pack = _builders.parse_json_object(raw)
-    except json.JSONDecodeError:
-        dbg = settings.run_dir / "_failed"
-        dbg.mkdir(parents=True, exist_ok=True)
-        (dbg / f"{pid}.raw.txt").write_text(raw, encoding="utf-8")
-        raise
-    _builders.write_workspace(settings.run_dir, p, pack, all_personas)
-    return pack
+    import time
+    last_err: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            raw = call_text_for_expand(settings, bus, costs, pid, user)
+            pack = _builders.parse_json_object(raw)
+            _builders.write_workspace(settings.run_dir, p, pack, all_personas)
+            return pack
+        except json.JSONDecodeError as e:
+            # LLMs occasionally emit malformed JSON — retry (next attempt usually parses).
+            last_err = e
+            dbg = settings.run_dir / "_failed"
+            dbg.mkdir(parents=True, exist_ok=True)
+            try:
+                (dbg / f"{pid}.attempt{attempt}.raw.txt").write_text(raw, encoding="utf-8")
+            except Exception:
+                pass
+            bus.emit(Event(EventType.LOG, persona_id=pid, stage="personas",
+                           msg=f"{pid}: invalid JSON from model (attempt {attempt}/{attempts}), retrying"))
+        except Exception as e:  # noqa: BLE001  (rate limit / API / network — transient)
+            last_err = e
+            bus.emit(Event(EventType.LOG, persona_id=pid, stage="personas",
+                           msg=f"{pid}: expand error {type(e).__name__} (attempt {attempt}/{attempts}), retrying"))
+        if attempt < attempts:
+            time.sleep(min(2 ** attempt, 8))
+    raise last_err  # type: ignore[misc]
 
 
 def call_text_for_expand(settings, bus, costs, pid, user) -> str:
     from ..llm.call import call_text
+    from ..llm.route import provider_for, key_for
+    model = settings.persona_model
     return call_text(
         bus, costs,
-        provider="anthropic", model=settings.persona_model,
-        system=SYSTEM_PROMPT, user=user, key=settings.anthropic_key,
+        provider=provider_for(model), model=model,
+        system=SYSTEM_PROMPT, user=user, key=key_for(settings, model),
         max_tokens=8192, temperature=0.9,
         persona_id=pid, kind="persona_expand", bucket="persona",
     )

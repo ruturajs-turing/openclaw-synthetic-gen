@@ -51,8 +51,9 @@ def call_text(
     try:
         temp = {} if temperature is None else {"temperature": temperature}
         if provider == "openai":
+            # max_completion_tokens (current param); omit temperature — reasoning/newer models reject custom temps
             resp = clients.openai_sync(key).chat.completions.create(
-                model=model, max_tokens=max_tokens, **temp,
+                model=model, max_completion_tokens=max_tokens,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
             )
             text, in_tok, out_tok = _strip_text_openai(resp)
@@ -79,7 +80,7 @@ async def acall_text(
         temp = {} if temperature is None else {"temperature": temperature}
         if provider == "openai":
             resp = await clients.openai_async(key).chat.completions.create(
-                model=model, max_tokens=max_tokens, **temp,
+                model=model, max_completion_tokens=max_tokens,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
             )
             text, in_tok, out_tok = _strip_text_openai(resp)
